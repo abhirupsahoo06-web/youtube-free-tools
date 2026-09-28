@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF1A24" />
+      <stop offset="100%" stop-color="#CC0000" />
+    </linearGradient>
+    <linearGradient id="toolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
+  </defs>
+  <!-- Rounded Rect Screen base -->
+  <rect x="4" y="8" width="56" height="48" rx="16" fill="url(#redGrad)" />
+  <rect x="4" y="8" width="56" height="48" rx="16" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+  
+  <!-- Play triangle with clean creator wrench/spark motif -->
+  <path d="M26 21L44 32L26 43V21Z" fill="#FFFFFF" />
+  
+  <!-- Subtle tool gear dot / spark indicator -->
+  <circle cx="47" cy="18" r="4" fill="#FFFFFF" opacity="0.9" />
+</svg>
