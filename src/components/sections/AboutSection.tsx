@@ -7,25 +7,25 @@ export const AboutSection: React.FC = () => {
       icon: Sparkles,
       title: 'Creator-Centric Focus',
       description:
-        'Every tool is designed to solve real daily creator headaches, from metadata formatting to previewing assets before publishing.',
+        'Built specifically for creators, focusing on simplicity, clean design, and a distraction-free experience.',
     },
     {
       icon: HeartHandshake,
       title: '100% Free Forever',
       description:
-        'No monthly subscriptions, no tokens, and no hidden trial periods. All utilities are free for independent creators.',
+        'No monthly subscriptions, no hidden tokens, and no paywalls. Free and accessible to creators of all sizes.',
     },
     {
       icon: Zap,
       title: 'Fast & Browser-Native',
       description:
-        'No heavy software downloads. Everything runs quickly in your browser with immediate, responsive results.',
+        'No software to install. Fast loading times and responsive web interfaces designed to save creators time.',
     },
     {
       icon: Shield,
       title: 'Privacy & Security',
       description:
-        'Your channel data and assets remain yours. We prioritize client-side execution without harvesting private content.',
+        'Respecting creator privacy with no unnecessary data collection or account tracking.',
     },
   ]
 
@@ -43,7 +43,7 @@ export const AboutSection: React.FC = () => {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
               Empowering Creators with{' '}
               <span className="bg-gradient-to-r from-red-500 to-rose-500 bg-clip-text text-transparent">
-                Frictionless Utilities
+                Simple Utilities
               </span>
             </h2>
 
@@ -54,9 +54,8 @@ export const AboutSection: React.FC = () => {
             </p>
 
             <p className="text-base text-slate-400 leading-relaxed">
-              Growing a channel requires juggling dozens of small tasks every week—optimizing titles, checking thumbnails,
-              formatting timestamps, and researching tags. Our goal is to aggregate those everyday creator tasks into
-              one fast, dependable, and completely free web hub.
+              Our mission is to provide independent YouTube creators with a reliable, streamlined web platform.
+              As the platform expands, new free utilities will be introduced directly into this unified hub.
             </p>
 
             <div className="pt-2">
@@ -67,7 +66,7 @@ export const AboutSection: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-red-500 flex-shrink-0" />
-                  <span>Modular component design</span>
+                  <span>Modular platform architecture</span>
                 </div>
               </div>
             </div>

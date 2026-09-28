@@ -1,25 +1,13 @@
-import type { LucideIcon } from 'lucide-react'
-
 export interface NavItem {
   label: string
   href: string
   isExternal?: boolean
 }
 
-export type ToolStatus = 'coming_soon' | 'beta' | 'active'
+export type ToolStatus = 'coming_soon' | 'active'
 
-export interface ToolItem {
+export interface ToolPlaceholder {
   id: string
-  title: string
-  category: 'Optimization' | 'Media & Graphics' | 'Channel Growth' | 'Audio & Video' | 'Utility'
-  description: string
+  label: string
   status: ToolStatus
-  iconName: string
-  tags?: string[]
-}
-
-export interface ValuePillar {
-  icon: LucideIcon
-  title: string
-  description: string
 }
