@@ -4,10 +4,17 @@ export interface NavItem {
   isExternal?: boolean
 }
 
-export type ToolStatus = 'coming_soon' | 'active'
+export type ToolStatus = 'active' | 'coming_soon'
 
-export interface ToolPlaceholder {
+export interface CreatorTool {
   id: string
-  label: string
+  title: string
+  subtitle: string
+  description: string
+  route: string
+  buttonText: string
   status: ToolStatus
+  iconName: string
+  badgeText?: string
+  aspectRatioTags?: string[]
 }

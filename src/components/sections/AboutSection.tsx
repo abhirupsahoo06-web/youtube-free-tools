@@ -5,68 +5,67 @@ export const AboutSection: React.FC = () => {
   const pillars = [
     {
       icon: Sparkles,
-      title: 'Creator-Centric Focus',
+      title: 'Creator-Centric Utilities',
       description:
-        'Built specifically for creators, focusing on simplicity, clean design, and a distraction-free experience.',
+        'Focused on speed, simplicity, and clean workflows. Zero learning curves or cluttered menus.',
     },
     {
       icon: HeartHandshake,
       title: '100% Free Forever',
       description:
-        'No monthly subscriptions, no hidden tokens, and no paywalls. Free and accessible to creators of all sizes.',
+        'No subscriptions, no watermarks, no tokens, and no hidden charges. Free for creators of all channel sizes.',
     },
     {
       icon: Zap,
-      title: 'Fast & Browser-Native',
+      title: 'Client-Side Execution',
       description:
-        'No software to install. Fast loading times and responsive web interfaces designed to save creators time.',
+        'Video and image processing happens locally right in your browser. Fast rendering and zero waiting for remote servers.',
     },
     {
       icon: Shield,
-      title: 'Privacy & Security',
+      title: 'Privacy By Design',
       description:
-        'Respecting creator privacy with no unnecessary data collection or account tracking.',
+        'Your media files stay on your machine. We do not store, upload, or inspect your private video or image assets.',
     },
   ]
 
   return (
-    <section id="about" className="relative py-24 sm:py-32 border-t border-white/[0.06] scroll-mt-20">
+    <section id="about" className="relative py-20 sm:py-28 border-t border-slate-200 dark:border-white/[0.06] scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Column: Core Description */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
               <span>About The Platform</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
               Empowering Creators with{' '}
-              <span className="bg-gradient-to-r from-red-500 to-rose-500 bg-clip-text text-transparent">
-                Simple Utilities
+              <span className="bg-gradient-to-r from-red-600 via-rose-600 to-red-500 bg-clip-text text-transparent">
+                Frictionless Utilities
               </span>
             </h2>
 
-            {/* Exact Required Copy */}
-            <p className="text-lg sm:text-xl text-slate-200 font-medium leading-relaxed">
-              <span className="text-white font-semibold">YouTube Free Tools</span> is a free creator-focused
-              platform designed to bring useful YouTube utilities into one simple website.
+            {/* Exact Required Sentence */}
+            <p className="text-lg sm:text-xl text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
+              <span className="text-slate-900 dark:text-white font-bold">YouTube Free Tools</span> is a free
+              collection of simple creator utilities designed to make everyday YouTube content creation faster and easier.
             </p>
 
-            <p className="text-base text-slate-400 leading-relaxed">
-              Our mission is to provide independent YouTube creators with a reliable, streamlined web platform.
-              As the platform expands, new free utilities will be introduced directly into this unified hub.
+            <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+              Whether you need to quickly frame a 16:9 widescreen video into a 9:16 vertical Short or crop a thumbnail for a high-converting video title, our tools operate directly inside your browser with maximum speed and zero hassle.
             </p>
 
             <div className="pt-2">
-              <div className="flex flex-col sm:flex-row gap-4 sm:items-center text-sm text-slate-300">
+              <div className="flex flex-col sm:flex-row gap-4 sm:items-center text-sm text-slate-700 dark:text-slate-300">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-red-500 flex-shrink-0" />
-                  <span>No account or sign-up needed</span>
+                  <span>No login or registration required</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-red-500 flex-shrink-0" />
-                  <span>Modular platform architecture</span>
+                  <span>Client-side private processing</span>
                 </div>
               </div>
             </div>
@@ -79,14 +78,14 @@ export const AboutSection: React.FC = () => {
               return (
                 <div
                   key={pillar.title}
-                  className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.07] hover:border-white/[0.15] transition-all duration-200 backdrop-blur-sm flex flex-col justify-between"
+                  className="p-6 rounded-2xl bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-white/[0.15] shadow-sm transition-all duration-200 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 flex items-center justify-center text-red-600 dark:text-red-400 mb-4">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="text-base font-bold text-white mb-2">{pillar.title}</h3>
-                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">{pillar.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                       {pillar.description}
                     </p>
                   </div>
