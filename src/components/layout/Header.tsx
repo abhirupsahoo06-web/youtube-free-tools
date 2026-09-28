@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Logo } from '../common/Logo'
 import { ThemeToggle } from '../common/ThemeToggle'
-import { Menu, X, ChevronDown, Video, Image, Wrench, Search, FileCode } from 'lucide-react'
+import { Menu, X, ChevronDown, Video, Image, Wrench, Search, FileCode, Music } from 'lucide-react'
 
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -59,6 +59,13 @@ export const Header: React.FC = () => {
       subtitle: 'Convert & extract audio in-browser',
       route: '/tools/video-converter',
       icon: FileCode,
+      tag: 'New',
+    },
+    {
+      title: 'Convert Video to Audio',
+      subtitle: 'Extract MP3, WAV, and M4A audio',
+      route: '/tools/video-to-audio',
+      icon: Music,
       tag: 'New',
     },
   ]

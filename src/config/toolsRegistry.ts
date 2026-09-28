@@ -54,4 +54,16 @@ export const CREATOR_TOOLS: CreatorTool[] = [
     badgeText: 'Local Media Only',
     aspectRatioTags: ['WebM', 'MP4', 'Audio Extract (WAV)', 'Client-Side'],
   },
+  {
+    id: 'video-to-audio',
+    title: 'Convert Video to Audio',
+    subtitle: 'Extract MP3, WAV, and M4A audio from your video files.',
+    description: 'Upload your local video file to extract high-quality audio tracks directly in your browser. Supports MP3, WAV, and M4A formats.',
+    route: '/tools/video-to-audio',
+    buttonText: 'Convert to Audio',
+    status: 'active',
+    iconName: 'Music',
+    badgeText: '100% In-Browser',
+    aspectRatioTags: ['MP3', 'WAV', 'M4A', 'Privacy First'],
+  },
 ]

@@ -8,6 +8,7 @@ import { VideoCropperPage } from './pages/VideoCropperPage'
 import { ImageCropperPage } from './pages/ImageCropperPage'
 import { YouTubeLinkAnalyzerPage } from './pages/YouTubeLinkAnalyzerPage'
 import { LocalVideoConverterPage } from './pages/LocalVideoConverterPage'
+import { VideoToAudioConverterPage } from './pages/VideoToAudioConverterPage'
 import { InfoModal, type ModalType } from './components/modals/InfoModal'
 
 // Scroll restoration helper
@@ -47,6 +48,7 @@ function AppContent() {
           <Route path="/tools/image-cropper" element={<ImageCropperPage />} />
           <Route path="/tools/youtube-analyzer" element={<YouTubeLinkAnalyzerPage />} />
           <Route path="/tools/video-converter" element={<LocalVideoConverterPage />} />
+          <Route path="/tools/video-to-audio" element={<VideoToAudioConverterPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </main>

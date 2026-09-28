@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Video, Image, Search, FileCode, ArrowRight, Sparkles, CheckCircle2, Clock } from 'lucide-react'
+import { Video, Image, Search, FileCode, ArrowRight, Sparkles, CheckCircle2, Clock, Music } from 'lucide-react'
 
 export const ToolsSection: React.FC = () => {
   return (
@@ -221,6 +221,54 @@ export const ToolsSection: React.FC = () => {
                 className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-base font-semibold text-slate-900 dark:text-white bg-slate-100 dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] border border-slate-300 dark:border-white/10 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
               >
                 <span>Open Converter</span>
+                <ArrowRight className="w-4 h-4 text-red-500" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 5: Convert Video to Audio */}
+          <div className="relative group rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] p-8 shadow-xl hover:shadow-2xl hover:border-red-500/40 dark:hover:border-red-500/40 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+            <div>
+              <div className="flex items-center justify-between gap-3 mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 flex items-center justify-center text-red-600 dark:text-red-400 shadow-sm group-hover:scale-105 transition-transform">
+                  <Music className="w-7 h-7" />
+                </div>
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>100% In-Browser</span>
+                </span>
+              </div>
+
+              <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Convert Video to Audio
+              </h3>
+
+              <p className="text-xs font-bold text-red-600 dark:text-red-400 tracking-wide uppercase mt-1">
+                Extract MP3, WAV, & M4A Audio
+              </p>
+
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-3">
+                Upload your local video file to extract high-quality audio tracks directly in your browser. Supports MP3, WAV, and M4A formats with zero server uploads.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {['Direct Upload', 'MP3 (128-320k)', 'WAV Lossless', 'M4A (AAC)', 'Client-Side'].map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/[0.06]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/[0.06]">
+              <Link
+                to="/tools/video-to-audio"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-base font-semibold text-slate-900 dark:text-white bg-slate-100 dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] border border-slate-300 dark:border-white/10 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <span>Convert to Audio</span>
                 <ArrowRight className="w-4 h-4 text-red-500" />
               </Link>
             </div>
