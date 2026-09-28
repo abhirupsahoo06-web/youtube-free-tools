@@ -6,6 +6,8 @@ import { Footer } from './components/layout/Footer'
 import { HomePage } from './pages/HomePage'
 import { VideoCropperPage } from './pages/VideoCropperPage'
 import { ImageCropperPage } from './pages/ImageCropperPage'
+import { YouTubeLinkAnalyzerPage } from './pages/YouTubeLinkAnalyzerPage'
+import { LocalVideoConverterPage } from './pages/LocalVideoConverterPage'
 import { InfoModal, type ModalType } from './components/modals/InfoModal'
 
 // Scroll restoration helper
@@ -43,6 +45,8 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/tools/video-cropper" element={<VideoCropperPage />} />
           <Route path="/tools/image-cropper" element={<ImageCropperPage />} />
+          <Route path="/tools/youtube-analyzer" element={<YouTubeLinkAnalyzerPage />} />
+          <Route path="/tools/video-converter" element={<LocalVideoConverterPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </main>

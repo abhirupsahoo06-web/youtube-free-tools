@@ -3,10 +3,21 @@ import type { CreatorTool } from '../types'
 /**
  * YouTube Free Tools Registry
  *
- * Modular registry for all creator utilities. Future tools (e.g. Thumbnail Downloader,
- * Audio Converter, Tag Generator, Subtitle Tools) can be registered here as active or coming_soon.
+ * Modular registry for all creator utilities.
  */
 export const CREATOR_TOOLS: CreatorTool[] = [
+  {
+    id: 'youtube-analyzer',
+    title: 'YouTube Link Analyzer',
+    subtitle: 'Analyze links, inspect thumbnails & generate embeds.',
+    description: 'Analyze a YouTube video link and get useful video information, thumbnail tools, embed options, and creator-friendly utilities.',
+    route: '/tools/youtube-analyzer',
+    buttonText: 'Open Analyzer',
+    status: 'active',
+    iconName: 'Search',
+    badgeText: 'Compliant & Free',
+    aspectRatioTags: ['Metadata', 'Thumbnails', 'Embed Generator', 'Creator Hub'],
+  },
   {
     id: 'video-cropper',
     title: 'Video Cropper',
@@ -16,8 +27,8 @@ export const CREATOR_TOOLS: CreatorTool[] = [
     buttonText: 'Open Video Cropper',
     status: 'active',
     iconName: 'Video',
-    badgeText: 'Free & In-Browser',
-    aspectRatioTags: ['16:9', '9:16 Shorts', '1:1', '4:5', 'Custom'],
+    badgeText: 'In-Browser 8-Handle',
+    aspectRatioTags: ['16:9', '9:16 Shorts', '1:1', '4:5', '4:3', 'Free'],
   },
   {
     id: 'image-cropper',
@@ -28,7 +39,19 @@ export const CREATOR_TOOLS: CreatorTool[] = [
     buttonText: 'Open Image Cropper',
     status: 'active',
     iconName: 'Image',
-    badgeText: 'Free & In-Browser',
-    aspectRatioTags: ['16:9 Thumbnail', '9:16 Story', '1:1 Avatar', '4:5 Post', 'Custom'],
+    badgeText: 'In-Browser 8-Handle',
+    aspectRatioTags: ['16:9 Thumbnail', '9:16 Story', '1:1 Avatar', '4:5 Post', '4:3', 'Free'],
+  },
+  {
+    id: 'video-converter',
+    title: 'Local Video Converter',
+    subtitle: 'Convert and extract media from your local video files.',
+    description: 'Convert your directly uploaded videos to WebM, MP4, or extract audio tracks locally in your browser with zero server uploads.',
+    route: '/tools/video-converter',
+    buttonText: 'Open Converter',
+    status: 'active',
+    iconName: 'FileCode',
+    badgeText: 'Local Media Only',
+    aspectRatioTags: ['WebM', 'MP4', 'Audio Extract (WAV)', 'Client-Side'],
   },
 ]
