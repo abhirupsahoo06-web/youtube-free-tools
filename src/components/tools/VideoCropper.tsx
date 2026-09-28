@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import {
   Upload,
   Play,
@@ -9,21 +9,17 @@ import {
   Sparkles,
   Volume2,
   VolumeX,
-  Eye,
   AlertCircle,
   Scissors,
   CheckCircle2,
-  StopCircle
+  StopCircle,
+  Maximize,
+  Minimize
 } from 'lucide-react'
-
-type AspectRatioPreset = '16:9' | '9:16' | '1:1' | '4:5' | 'original' | 'free'
-
-interface CropBox {
-  x: number // percentage 0-100
-  y: number // percentage 0-100
-  width: number // percentage 0-100
-  height: number // percentage 0-100
-}
+import { CropBoxOverlay } from '../common/CropBoxOverlay'
+import { PrecisionControls } from '../common/PrecisionControls'
+import { ZoomControls } from '../common/ZoomControls'
+import type { AspectRatioOption, CropRect } from '../../types/crop'
 
 export const VideoCropper: React.FC = () => {
   // Video Source States
@@ -37,18 +33,13 @@ export const VideoCropper: React.FC = () => {
   const [fileSizeStr, setFileSizeStr] = useState<string>('')
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
-  // Crop Box & Presets
-  const [aspectRatio, setAspectRatio] = useState<AspectRatioPreset>('9:16')
-  const [cropBox, setCropBox] = useState<CropBox>({ x: 25, y: 0, width: 50, height: 100 })
-  const [cropPixels, setCropPixels] = useState<{ width: number; height: number; x: number; y: number }>({
-    width: 1080,
-    height: 1920,
-    x: 0,
-    y: 0,
-  })
+  // Transforms & Zoom
+  const [zoom, setZoom] = useState<number>(1)
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false)
 
-  // Mode: 'editor' | 'preview_crop'
-  const [activeTab, setActiveTab] = useState<'editor' | 'preview'>('editor')
+  // Crop Box & Presets
+  const [aspectRatio, setAspectRatio] = useState<AspectRatioOption>('9:16')
+  const [cropRect, setCropRect] = useState<CropRect>({ x: 0, y: 0, width: 1080, height: 1920 })
 
   // Processing & Export State
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
@@ -58,12 +49,8 @@ export const VideoCropper: React.FC = () => {
 
   // DOM Refs
   const videoRef = useRef<HTMLVideoElement>(null)
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const isDraggingRef = useRef<boolean>(false)
-  const dragHandleRef = useRef<string | null>(null)
-  const dragStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
-  const startCropBoxRef = useRef<CropBox>(cropBox)
+  const stageRef = useRef<HTMLDivElement>(null)
 
   // Video processing cancellation ref
   const cancelProcessingRef = useRef<boolean>(false)
@@ -76,6 +63,37 @@ export const VideoCropper: React.FC = () => {
     const s = Math.floor(secs % 60)
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
   }
+
+  // Calculate default crop box based on aspect ratio
+  const calculateDefaultCrop = useCallback((preset: AspectRatioOption, vidW: number, vidH: number): CropRect => {
+    let ratio = 9 / 16
+    if (preset === '16:9') ratio = 16 / 9
+    else if (preset === '9:16') ratio = 9 / 16
+    else if (preset === '1:1') ratio = 1
+    else if (preset === '4:5') ratio = 4 / 5
+    else if (preset === '4:3') ratio = 4 / 3
+    else if (preset === 'original') ratio = vidW / vidH
+    else ratio = vidW / vidH
+
+    let w = vidW * 0.8
+    let h = w / ratio
+
+    if (h > vidH * 0.95) {
+      h = vidH * 0.95
+      w = h * ratio
+    }
+    if (w > vidW * 0.95) {
+      w = vidW * 0.95
+      h = w / ratio
+    }
+
+    w = Math.round(Math.min(w, vidW))
+    h = Math.round(Math.min(h, vidH))
+    const x = Math.round((vidW - w) / 2)
+    const y = Math.round((vidH - h) / 2)
+
+    return { x: Math.max(0, x), y: Math.max(0, y), width: w, height: h }
+  }, [])
 
   // Handle Video File Upload
   const handleFile = (file: File) => {
@@ -105,7 +123,7 @@ export const VideoCropper: React.FC = () => {
     }
   }
 
-  // Loaded metadata
+  // Loaded metadata from video tag
   const handleLoadedMetadata = () => {
     if (!videoRef.current) return
     const w = videoRef.current.videoWidth || 1920
@@ -114,174 +132,24 @@ export const VideoCropper: React.FC = () => {
 
     setVideoDimensions({ width: w, height: h })
     setVideoDuration(dur)
-    resetCrop(w, h, '9:16')
+    const initialBox = calculateDefaultCrop(aspectRatio, w, h)
+    setCropRect(initialBox)
   }
 
-  // Compute crop box based on aspect ratio preset
-  const calculateCropFromRatio = useCallback(
-    (preset: AspectRatioPreset, vidW: number, vidH: number): CropBox => {
-      let ratio = 9 / 16
-      if (preset === '16:9') ratio = 16 / 9
-      else if (preset === '9:16') ratio = 9 / 16
-      else if (preset === '1:1') ratio = 1
-      else if (preset === '4:5') ratio = 4 / 5
-      else if (preset === 'original') ratio = vidW / vidH
-      else return { x: 10, y: 10, width: 80, height: 80 }
-
-      const containerRatio = vidW / vidH
-      let boxW = 80
-      let boxH = 80
-
-      if (ratio > containerRatio) {
-        boxW = 85
-        boxH = (boxW * containerRatio) / ratio
-      } else {
-        boxH = 85
-        boxW = (boxH * ratio) / containerRatio
-      }
-
-      boxW = Math.min(boxW, 95)
-      boxH = Math.min(boxH, 95)
-
-      const boxX = (100 - boxW) / 2
-      const boxY = (100 - boxH) / 2
-
-      return {
-        x: Math.max(0, boxX),
-        y: Math.max(0, boxY),
-        width: boxW,
-        height: boxH,
-      }
-    },
-    []
-  )
-
-  const updatePixelValues = (box: CropBox, vidW: number, vidH: number) => {
-    const pxW = Math.round((box.width / 100) * vidW)
-    const pxH = Math.round((box.height / 100) * vidH)
-    const pxX = Math.round((box.x / 100) * vidW)
-    const pxY = Math.round((box.y / 100) * vidH)
-    setCropPixels({ width: pxW, height: pxH, x: pxX, y: pxY })
-  }
-
-  const resetCrop = (
-    w = videoDimensions.width,
-    h = videoDimensions.height,
-    preset = aspectRatio
-  ) => {
-    const newBox = calculateCropFromRatio(preset, w, h)
-    setCropBox(newBox)
-    updatePixelValues(newBox, w, h)
-  }
-
-  const handleRatioChange = (preset: AspectRatioPreset) => {
-    setAspectRatio(preset)
+  const handleAspectRatioChange = (newRatio: AspectRatioOption) => {
+    setAspectRatio(newRatio)
     if (videoDimensions.width > 0 && videoDimensions.height > 0) {
-      const newBox = calculateCropFromRatio(preset, videoDimensions.width, videoDimensions.height)
-      setCropBox(newBox)
-      updatePixelValues(newBox, videoDimensions.width, videoDimensions.height)
+      const newBox = calculateDefaultCrop(newRatio, videoDimensions.width, videoDimensions.height)
+      setCropRect(newBox)
     }
   }
 
-  // Pointer drag & resize handlers for crop rectangle
-  const handlePointerDown = (e: React.PointerEvent, handle: string) => {
-    e.preventDefault()
-    e.stopPropagation()
-    isDraggingRef.current = true
-    dragHandleRef.current = handle
-    dragStartPosRef.current = { x: e.clientX, y: e.clientY }
-    startCropBoxRef.current = { ...cropBox }
-
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', handlePointerUp)
-  }
-
-  const handlePointerMove = (e: PointerEvent) => {
-    if (!isDraggingRef.current || !containerRef.current) return
-
-    const rect = containerRef.current.getBoundingClientRect()
-    if (rect.width === 0 || rect.height === 0) return
-
-    const deltaXPercent = ((e.clientX - dragStartPosRef.current.x) / rect.width) * 100
-    const deltaYPercent = ((e.clientY - dragStartPosRef.current.y) / rect.height) * 100
-
-    const start = startCropBoxRef.current
-    const handle = dragHandleRef.current
-
-    let newX = start.x
-    let newY = start.y
-    let newW = start.width
-    let newH = start.height
-
-    if (handle === 'move') {
-      newX = Math.max(0, Math.min(start.x + deltaXPercent, 100 - start.width))
-      newY = Math.max(0, Math.min(start.y + deltaYPercent, 100 - start.height))
-    } else {
-      let targetRatio: number | null = null
-      if (aspectRatio === '16:9') targetRatio = 16 / 9
-      else if (aspectRatio === '9:16') targetRatio = 9 / 16
-      else if (aspectRatio === '1:1') targetRatio = 1
-      else if (aspectRatio === '4:5') targetRatio = 4 / 5
-      else if (aspectRatio === 'original' && videoDimensions.height > 0) {
-        targetRatio = videoDimensions.width / videoDimensions.height
-      }
-
-      const containerRatio = videoDimensions.width / videoDimensions.height
-
-      if (handle?.includes('e')) {
-        newW = Math.max(5, Math.min(start.width + deltaXPercent, 100 - start.x))
-      }
-      if (handle?.includes('w')) {
-        const potentialW = start.width - deltaXPercent
-        if (potentialW >= 5 && start.x + deltaXPercent >= 0) {
-          newX = start.x + deltaXPercent
-          newW = potentialW
-        }
-      }
-      if (handle?.includes('s')) {
-        newH = Math.max(5, Math.min(start.height + deltaYPercent, 100 - start.y))
-      }
-      if (handle?.includes('n')) {
-        const potentialH = start.height - deltaYPercent
-        if (potentialH >= 5 && start.y + deltaYPercent >= 0) {
-          newY = start.y + deltaYPercent
-          newH = potentialH
-        }
-      }
-
-      if (targetRatio && containerRatio) {
-        if (handle?.includes('e') || handle?.includes('w')) {
-          newH = (newW * containerRatio) / targetRatio
-          if (newY + newH > 100) {
-            newH = 100 - newY
-            newW = (newH * targetRatio) / containerRatio
-          }
-        } else if (handle?.includes('n') || handle?.includes('s')) {
-          newW = (newH * targetRatio) / containerRatio
-          if (newX + newW > 100) {
-            newW = 100 - newX
-            newH = (newW * containerRatio) / targetRatio
-          }
-        }
-      }
+  const handleReset = () => {
+    setZoom(1)
+    if (videoDimensions.width > 0 && videoDimensions.height > 0) {
+      const newBox = calculateDefaultCrop(aspectRatio, videoDimensions.width, videoDimensions.height)
+      setCropRect(newBox)
     }
-
-    const updated: CropBox = {
-      x: Math.max(0, Math.min(newX, 95)),
-      y: Math.max(0, Math.min(newY, 95)),
-      width: Math.max(5, Math.min(newW, 100 - newX)),
-      height: Math.max(5, Math.min(newH, 100 - newY)),
-    }
-
-    setCropBox(updated)
-    updatePixelValues(updated, videoDimensions.width, videoDimensions.height)
-  }
-
-  const handlePointerUp = () => {
-    isDraggingRef.current = false
-    dragHandleRef.current = null
-    window.removeEventListener('pointermove', handlePointerMove)
-    window.removeEventListener('pointerup', handlePointerUp)
   }
 
   // Play / Pause video control
@@ -296,41 +164,19 @@ export const VideoCropper: React.FC = () => {
     }
   }
 
-  // Video time update
-  const handleTimeUpdate = () => {
-    if (!videoRef.current) return
-    setCurrentTime(videoRef.current.currentTime)
-
-    // If preview tab is active, draw current cropped frame to canvas
-    if (activeTab === 'preview' && previewCanvasRef.current) {
-      drawCroppedFrame(previewCanvasRef.current, videoRef.current)
+  // Fullscreen toggle
+  const toggleFullscreen = () => {
+    if (!stageRef.current) return
+    if (!document.fullscreenElement) {
+      stageRef.current.requestFullscreen().catch((err) => console.error(err))
+      setIsFullscreen(true)
+    } else {
+      document.exitFullscreen().catch((err) => console.error(err))
+      setIsFullscreen(false)
     }
   }
 
-  // Draw cropped frame onto a canvas
-  const drawCroppedFrame = useCallback((canvas: HTMLCanvasElement, video: HTMLVideoElement) => {
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    const sourceX = (cropBox.x / 100) * video.videoWidth
-    const sourceY = (cropBox.y / 100) * video.videoHeight
-    const sourceW = (cropBox.width / 100) * video.videoWidth
-    const sourceH = (cropBox.height / 100) * video.videoHeight
-
-    canvas.width = Math.round(sourceW)
-    canvas.height = Math.round(sourceH)
-
-    ctx.drawImage(video, sourceX, sourceY, sourceW, sourceH, 0, 0, canvas.width, canvas.height)
-  }, [cropBox])
-
-  // When switching to preview tab, draw current frame
-  useEffect(() => {
-    if (activeTab === 'preview' && previewCanvasRef.current && videoRef.current) {
-      drawCroppedFrame(previewCanvasRef.current, videoRef.current)
-    }
-  }, [activeTab, drawCroppedFrame])
-
-  // REAL CLIENT-SIDE VIDEO PROCESSING ENGINE
+  // REAL CLIENT-SIDE VIDEO PROCESSING ENGINE (CROPS TO EXACT SELECTION ONLY)
   const processAndExportVideo = async () => {
     if (!videoRef.current || !videoSrc) return
 
@@ -344,25 +190,25 @@ export const VideoCropper: React.FC = () => {
     if (wasPlaying) video.pause()
 
     try {
-      // Calculate output dimensions (must be even numbers for h264/vp9 encoders)
-      let targetW = Math.round((cropBox.width / 100) * video.videoWidth)
-      let targetH = Math.round((cropBox.height / 100) * video.videoHeight)
+      // Calculate output dimensions: only the cropped portion (must be even for video codecs)
+      let targetW = Math.round(cropRect.width)
+      let targetH = Math.round(cropRect.height)
       if (targetW % 2 !== 0) targetW += 1
       if (targetH % 2 !== 0) targetH += 1
 
-      const sourceX = (cropBox.x / 100) * video.videoWidth
-      const sourceY = (cropBox.y / 100) * video.videoHeight
-      const sourceW = (cropBox.width / 100) * video.videoWidth
-      const sourceH = (cropBox.height / 100) * video.videoHeight
+      const sourceX = cropRect.x
+      const sourceY = cropRect.y
+      const sourceW = cropRect.width
+      const sourceH = cropRect.height
 
-      // Create offscreen rendering canvas
+      // Dedicated offscreen processing canvas sized strictly to the crop rectangle
       const canvas = document.createElement('canvas')
       canvas.width = targetW
       canvas.height = targetH
       const ctx = canvas.getContext('2d', { alpha: false })
       if (!ctx) throw new Error('Could not initialize canvas graphics.')
 
-      // Audio setup using AudioContext to preserve video soundtrack
+      // Preserve audio via AudioContext
       let audioDestination: MediaStreamAudioDestinationNode | null = null
       let audioCtx: AudioContext | null = null
       try {
@@ -371,7 +217,7 @@ export const VideoCropper: React.FC = () => {
         const sourceNode = audioCtx.createMediaElementSource(video)
         audioDestination = audioCtx.createMediaStreamDestination()
         sourceNode.connect(audioDestination)
-        sourceNode.connect(audioCtx.destination) // Keep monitoring
+        sourceNode.connect(audioCtx.destination)
       } catch (e) {
         console.warn('Audio capture note:', e)
       }
@@ -384,7 +230,6 @@ export const VideoCropper: React.FC = () => {
       }
       const combinedStream = new MediaStream(combinedTracks)
 
-      // Determine best supported MIME type
       let mimeType = 'video/webm;codecs=vp9,opus'
       if (!MediaRecorder.isTypeSupported(mimeType)) {
         mimeType = 'video/webm;codecs=vp8,opus'
@@ -398,7 +243,7 @@ export const VideoCropper: React.FC = () => {
 
       const recorder = new MediaRecorder(combinedStream, {
         mimeType,
-        videoBitsPerSecond: 6000000, // 6 Mbps high quality
+        videoBitsPerSecond: 6000000,
       })
       mediaRecorderRef.current = recorder
 
@@ -434,7 +279,7 @@ export const VideoCropper: React.FC = () => {
       recorder.start(100)
       await video.play()
 
-      // Real-time frame rendering loop
+      // Real-time rendering loop drawing ONLY the cropped region
       const renderLoop = () => {
         if (cancelProcessingRef.current) {
           recorder.stop()
@@ -450,7 +295,6 @@ export const VideoCropper: React.FC = () => {
         if (!video.ended && video.currentTime < video.duration - 0.1) {
           requestAnimationFrame(renderLoop)
         } else {
-          // Finished rendering
           setProcessingProgress(100)
           setTimeout(() => {
             recorder.stop()
@@ -504,16 +348,17 @@ export const VideoCropper: React.FC = () => {
     setErrorMsg(null)
     setIsPlaying(false)
     setVideoDimensions({ width: 0, height: 0 })
+    setZoom(1)
   }
 
   return (
     <div className="w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/[0.08]">
+      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/[0.08]">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-600 dark:text-red-400 mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Browser-Native Video Suite</span>
+            <span>Interactive Crop Suite</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Video Cropper
@@ -527,8 +372,8 @@ export const VideoCropper: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => resetCrop()}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors"
+              onClick={handleReset}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors cursor-pointer"
             >
               <ResetIcon className="w-3.5 h-3.5" />
               <span>Reset</span>
@@ -536,7 +381,7 @@ export const VideoCropper: React.FC = () => {
             <button
               type="button"
               onClick={handleClear}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 border border-rose-200 dark:border-rose-500/20 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 border border-rose-200 dark:border-rose-500/20 transition-colors cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear Video</span>
@@ -575,7 +420,7 @@ export const VideoCropper: React.FC = () => {
             Upload Video or Drag & Drop
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mb-6 leading-relaxed">
-            Supports MP4, WebM, and MOV files. High-performance client-side cropping directly in your browser with zero server uploads.
+            Supports MP4, WebM, and MOV files. Crop visually with 8 handles and rule-of-thirds grid, then export locally in your browser.
           </p>
           <span className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold text-white bg-gradient-to-r from-red-600 to-rose-600 shadow-md shadow-red-600/25">
             Select Video From Device
@@ -584,171 +429,49 @@ export const VideoCropper: React.FC = () => {
       ) : (
         /* Workspace */
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Main Visual Crop Stage (Col 8) */}
+          {/* Main Visual Crop Stage & Timeline (Col 8) */}
           <div className="lg:col-span-8 flex flex-col gap-4">
-            {/* View Tab Switcher & Presets */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm">
-              {/* Aspect Ratio Presets */}
-              <div className="flex flex-wrap items-center gap-1">
-                <span className="text-xs font-bold uppercase text-slate-400 mr-1.5">Preset:</span>
-                {(
-                  [
-                    { key: '9:16', label: '9:16 Shorts' },
-                    { key: '16:9', label: '16:9 Widescreen' },
-                    { key: '1:1', label: '1:1 Square' },
-                    { key: '4:5', label: '4:5 Portrait' },
-                    { key: 'original', label: 'Original' },
-                  ] as { key: AspectRatioPreset; label: string }[]
-                ).map((preset) => (
-                  <button
-                    key={preset.key}
-                    type="button"
-                    onClick={() => handleRatioChange(preset.key)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                      aspectRatio === preset.key
-                        ? 'bg-red-600 text-white shadow-sm'
-                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08]'
-                    }`}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Editor vs Preview Mode */}
-              <div className="flex items-center gap-1 bg-slate-100 dark:bg-white/[0.04] p-1 rounded-xl">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('editor')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                    activeTab === 'editor'
-                      ? 'bg-white dark:bg-white/[0.1] text-red-600 dark:text-white shadow-sm'
-                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
-                  }`}
-                >
-                  <Scissors className="w-3.5 h-3.5 inline mr-1" />
-                  <span>Crop Area</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('preview')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                    activeTab === 'preview'
-                      ? 'bg-white dark:bg-white/[0.1] text-red-600 dark:text-white shadow-sm'
-                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
-                  }`}
-                >
-                  <Eye className="w-3.5 h-3.5 inline mr-1" />
-                  <span>Cropped Result</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Stage: Interactive Crop or Cropped Canvas Preview */}
-            {activeTab === 'editor' ? (
+            {/* Top / Center: Video Preview in Large Dark Canvas Workspace */}
+            <div
+              ref={stageRef}
+              className="relative w-full rounded-3xl bg-[#090a0f] border border-slate-800 flex items-center justify-center overflow-auto min-h-[440px] max-h-[640px] p-6 shadow-inner select-none"
+            >
+              {/* Centered Media Container that scales with Zoom */}
               <div
                 ref={containerRef}
-                className="relative w-full rounded-3xl bg-slate-950 border border-slate-800 flex items-center justify-center overflow-hidden min-h-[420px] max-h-[600px] select-none shadow-inner"
-                style={{ touchAction: 'none' }}
+                className="relative inline-block shadow-2xl transition-transform duration-75"
+                style={{
+                  transform: `scale(${zoom})`,
+                  transformOrigin: 'center center',
+                }}
               >
-                {/* The video element */}
+                {/* The Video Element */}
                 <video
                   ref={videoRef}
                   src={videoSrc}
                   playsInline
                   crossOrigin="anonymous"
                   onLoadedMetadata={handleLoadedMetadata}
-                  onTimeUpdate={handleTimeUpdate}
+                  onTimeUpdate={() => videoRef.current && setCurrentTime(videoRef.current.currentTime)}
                   onEnded={() => setIsPlaying(false)}
-                  className="max-w-full max-h-[560px] object-contain pointer-events-none"
+                  className="max-w-[70vw] max-h-[52vh] object-contain block pointer-events-none select-none"
                 />
 
-                {/* Dark Mask Outside Crop Box */}
-                <div className="absolute inset-0 pointer-events-none">
-                  <div
-                    className="absolute bg-black/70 backdrop-blur-[1px]"
-                    style={{ top: 0, left: 0, right: 0, height: `${cropBox.y}%` }}
+                {/* Professional 8-Handle Crop Box Overlay with Rule-of-Thirds Grid */}
+                {videoDimensions.width > 0 && (
+                  <CropBoxOverlay
+                    cropRect={cropRect}
+                    naturalWidth={videoDimensions.width}
+                    naturalHeight={videoDimensions.height}
+                    aspectRatio={aspectRatio}
+                    onCropChange={setCropRect}
+                    containerRef={containerRef}
                   />
-                  <div
-                    className="absolute bg-black/70 backdrop-blur-[1px]"
-                    style={{
-                      top: `${cropBox.y + cropBox.height}%`,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                    }}
-                  />
-                  <div
-                    className="absolute bg-black/70 backdrop-blur-[1px]"
-                    style={{
-                      top: `${cropBox.y}%`,
-                      left: 0,
-                      width: `${cropBox.x}%`,
-                      height: `${cropBox.height}%`,
-                    }}
-                  />
-                  <div
-                    className="absolute bg-black/70 backdrop-blur-[1px]"
-                    style={{
-                      top: `${cropBox.y}%`,
-                      left: `${cropBox.x + cropBox.width}%`,
-                      right: 0,
-                      height: `${cropBox.height}%`,
-                    }}
-                  />
-                </div>
-
-                {/* Interactive Crop Box Window */}
-                <div
-                  className="absolute border-2 border-red-500 shadow-2xl cursor-move touch-none"
-                  style={{
-                    top: `${cropBox.y}%`,
-                    left: `${cropBox.x}%`,
-                    width: `${cropBox.width}%`,
-                    height: `${cropBox.height}%`,
-                  }}
-                  onPointerDown={(e) => handlePointerDown(e, 'move')}
-                >
-                  {/* Grid Lines */}
-                  <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-40">
-                    <div className="border-r border-b border-white/50" />
-                    <div className="border-r border-b border-white/50" />
-                    <div className="border-b border-white/50" />
-                    <div className="border-r border-b border-white/50" />
-                    <div className="border-r border-b border-white/50" />
-                    <div className="border-b border-white/50" />
-                    <div className="border-r border-b border-white/50" />
-                    <div className="border-r border-b border-white/50" />
-                    <div />
-                  </div>
-
-                  {/* Resolution tag */}
-                  <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 text-[10px] font-mono font-bold text-white pointer-events-none">
-                    {cropPixels.width} × {cropPixels.height}
-                  </div>
-
-                  {/* Resize Handles */}
-                  <div className="crop-handle -top-2 -left-2 cursor-nwse-resize" onPointerDown={(e) => handlePointerDown(e, 'nw')} />
-                  <div className="crop-handle -top-2 left-1/2 -translate-x-1/2 cursor-ns-resize" onPointerDown={(e) => handlePointerDown(e, 'n')} />
-                  <div className="crop-handle -top-2 -right-2 cursor-nesw-resize" onPointerDown={(e) => handlePointerDown(e, 'ne')} />
-                  <div className="crop-handle top-1/2 -right-2 -translate-y-1/2 cursor-ew-resize" onPointerDown={(e) => handlePointerDown(e, 'e')} />
-                  <div className="crop-handle -bottom-2 -right-2 cursor-nwse-resize" onPointerDown={(e) => handlePointerDown(e, 'se')} />
-                  <div className="crop-handle -bottom-2 left-1/2 -translate-x-1/2 cursor-ns-resize" onPointerDown={(e) => handlePointerDown(e, 's')} />
-                  <div className="crop-handle -bottom-2 -left-2 cursor-nesw-resize" onPointerDown={(e) => handlePointerDown(e, 'sw')} />
-                  <div className="crop-handle top-1/2 -left-2 -translate-y-1/2 cursor-ew-resize" onPointerDown={(e) => handlePointerDown(e, 'w')} />
-                </div>
+                )}
               </div>
-            ) : (
-              /* Preview Cropped Result Window */
-              <div className="w-full rounded-3xl bg-slate-950 border border-slate-800 flex items-center justify-center p-6 min-h-[420px] max-h-[600px] overflow-hidden">
-                <canvas
-                  ref={previewCanvasRef}
-                  className="max-w-full max-h-[520px] object-contain rounded-2xl shadow-2xl border border-white/10"
-                />
-              </div>
-            )}
+            </div>
 
-            {/* Video Controls Bar */}
+            {/* Bottom: Video Timeline & Playback Bar */}
             <div className="p-4 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] flex flex-col gap-3 shadow-sm">
               {/* Timeline Seek Bar */}
               <div className="flex items-center gap-3">
@@ -770,13 +493,14 @@ export const VideoCropper: React.FC = () => {
                 </span>
               </div>
 
-              {/* Bottom Playback Controls */}
+              {/* Playback Controls Row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={togglePlay}
                     className="p-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-transform active:scale-95 shadow-md shadow-red-600/25 cursor-pointer"
+                    title={isPlaying ? 'Pause' : 'Play'}
                   >
                     {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                   </button>
@@ -789,80 +513,73 @@ export const VideoCropper: React.FC = () => {
                         setIsMuted(!isMuted)
                       }
                     }}
-                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors"
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer"
+                    title={isMuted ? 'Unmute' : 'Mute'}
                   >
                     {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                   </button>
                 </div>
 
-                <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-3">
-                  <span>Source: <strong className="font-mono text-slate-800 dark:text-slate-200">{videoDimensions.width} × {videoDimensions.height}</strong></span>
-                  <span>•</span>
-                  <span>Size: <strong className="font-mono text-slate-800 dark:text-slate-200">{fileSizeStr}</strong></span>
+                <div className="flex items-center gap-3">
+                  <div className="text-xs text-slate-500 dark:text-slate-400 hidden sm:flex items-center gap-2">
+                    <span>Source: <strong className="font-mono text-slate-800 dark:text-slate-200">{videoDimensions.width} × {videoDimensions.height}</strong></span>
+                    <span>•</span>
+                    <span>Size: <strong className="font-mono text-slate-800 dark:text-slate-200">{fileSizeStr}</strong></span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={toggleFullscreen}
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer"
+                    title="Fullscreen Preview"
+                  >
+                    {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
+
+            {/* Zoom Controls Bar */}
+            <ZoomControls
+              zoom={zoom}
+              onZoomChange={setZoom}
+              onFitToScreen={() => setZoom(1.0)}
+              onResetZoom={() => setZoom(1.0)}
+            />
+
+            {/* Precision Controls: Aspect Ratio + Live Dimensions + Numeric Inputs */}
+            <PrecisionControls
+              cropRect={cropRect}
+              naturalWidth={videoDimensions.width}
+              naturalHeight={videoDimensions.height}
+              aspectRatio={aspectRatio}
+              onCropChange={setCropRect}
+              onAspectRatioChange={handleAspectRatioChange}
+            />
           </div>
 
-          {/* Controls & Export Panel (Col 4) */}
+          {/* Export Sidebar (Col 4) */}
           <div className="lg:col-span-4 space-y-6">
-            {/* Crop Parameters Card */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm space-y-4">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                <span>Crop Dimensions</span>
-                <span className="text-xs font-normal text-slate-500">Output Resolution</span>
-              </h3>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs font-medium text-slate-500 block mb-1">
-                    Width (px)
-                  </label>
-                  <input
-                    type="number"
-                    readOnly
-                    value={cropPixels.width}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] text-sm font-mono font-semibold text-slate-900 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-medium text-slate-500 block mb-1">
-                    Height (px)
-                  </label>
-                  <input
-                    type="number"
-                    readOnly
-                    value={cropPixels.height}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] text-sm font-mono font-semibold text-slate-900 dark:text-white"
-                  />
-                </div>
-              </div>
-
-              {/* Target Platform Guidance */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.06] text-xs space-y-1.5 text-slate-600 dark:text-slate-400">
-                <div className="font-semibold text-slate-800 dark:text-slate-200">YouTube Targets:</div>
-                <div className="flex justify-between">
-                  <span>YouTube Shorts:</span>
-                  <span className="font-mono text-red-500 font-semibold">9:16 (1080×1920)</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Standard YouTube Video:</span>
-                  <span className="font-mono text-red-500 font-semibold">16:9 (1920×1080)</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Community Post / Square:</span>
-                  <span className="font-mono text-slate-500 font-semibold">1:1 (1080×1080)</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Export Card */}
             <div className="p-6 rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm space-y-5">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">Export Cropped Video</h3>
 
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                Video processing executes locally inside your browser using hardware-accelerated Canvas & MediaRecorder. No video files are uploaded.
-              </p>
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.06] text-xs space-y-2 text-slate-600 dark:text-slate-400">
+                <div className="font-semibold text-slate-800 dark:text-slate-200">Export Specifications:</div>
+                <div className="flex justify-between">
+                  <span>Output Area:</span>
+                  <span className="font-mono font-bold text-red-500">
+                    {Math.round(cropRect.width)} × {Math.round(cropRect.height)} px
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Output Ratio:</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 uppercase">{aspectRatio}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Processing:</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-medium">100% In-Browser</span>
+                </div>
+              </div>
 
               {/* Progress Indicator */}
               {isProcessing && (
@@ -870,7 +587,7 @@ export const VideoCropper: React.FC = () => {
                   <div className="flex items-center justify-between text-xs font-semibold text-red-600 dark:text-red-400">
                     <span className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
-                      <span>Processing frames locally...</span>
+                      <span>Cropping video locally...</span>
                     </span>
                     <span className="font-mono">{processingProgress}%</span>
                   </div>
@@ -885,7 +602,7 @@ export const VideoCropper: React.FC = () => {
                   <button
                     type="button"
                     onClick={cancelProcessing}
-                    className="inline-flex items-center justify-center gap-1.5 text-xs text-rose-500 hover:text-rose-600 font-semibold w-full mt-1"
+                    className="inline-flex items-center justify-center gap-1.5 text-xs text-rose-500 hover:text-rose-600 font-semibold w-full mt-1 cursor-pointer"
                   >
                     <StopCircle className="w-3.5 h-3.5" />
                     <span>Cancel Processing</span>
@@ -893,7 +610,7 @@ export const VideoCropper: React.FC = () => {
                 </div>
               )}
 
-              {/* Export Button */}
+              {/* Export Action */}
               {!isProcessing && !processedVideoUrl && (
                 <button
                   type="button"
@@ -913,12 +630,12 @@ export const VideoCropper: React.FC = () => {
                     <div>
                       <p className="font-bold text-sm">Cropped Video Ready!</p>
                       <p className="mt-0.5 text-emerald-600 dark:text-emerald-400">
-                        Resolution: <strong className="font-mono">{cropPixels.width} × {cropPixels.height}</strong> • Size: <strong className="font-mono">{processedFileSize}</strong>
+                        Resolution: <strong className="font-mono">{Math.round(cropRect.width)} × {Math.round(cropRect.height)}</strong> • Size: <strong className="font-mono">{processedFileSize}</strong>
                       </p>
                     </div>
                   </div>
 
-                  {/* Cropped Video Player Preview */}
+                  {/* Cropped Video Player Preview (Only cropped portion) */}
                   <div className="rounded-2xl overflow-hidden border border-slate-700 bg-black aspect-video flex items-center justify-center">
                     <video
                       src={processedVideoUrl}
@@ -930,7 +647,7 @@ export const VideoCropper: React.FC = () => {
                   {/* Direct Download Button */}
                   <a
                     href={processedVideoUrl}
-                    download={`${videoName}-cropped-${cropPixels.width}x${cropPixels.height}.webm`}
+                    download={`${videoName}-cropped-${Math.round(cropRect.width)}x${Math.round(cropRect.height)}.webm`}
                     className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl text-base font-bold text-white bg-gradient-to-r from-red-600 via-red-500 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-lg shadow-red-600/30 hover:-translate-y-0.5 active:translate-y-0"
                   >
                     <Download className="w-5 h-5" />
@@ -943,12 +660,16 @@ export const VideoCropper: React.FC = () => {
                       setProcessedVideoUrl(null)
                       setProcessedFileSize(null)
                     }}
-                    className="w-full text-center text-xs text-slate-500 hover:text-slate-800 dark:hover:text-white"
+                    className="w-full text-center text-xs text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer"
                   >
                     Crop another segment or adjustment
                   </button>
                 </div>
               )}
+
+              <div className="text-[11px] text-slate-500 text-center">
+                Processed locally in your browser • Zero data uploaded
+              </div>
             </div>
           </div>
         </div>
