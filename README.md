@@ -1,91 +1,117 @@
-# YouTube Free Tools (Version 1)
+# 🎬 YouTube Free Tools
 
-> **Free Tools for YouTube Creators**  
-> Simple, fast and free tools to help creators grow, optimize and manage their YouTube content.
+> **Free, Browser-Native Media Suite for YouTube Creators**  
+> Simple, fast, and 100% private tools to help creators edit, optimize, and manage their content. Zero server uploads, zero sign-ups, and zero watermarks.
 
-A modern, responsive SaaS-style web platform designed for YouTube creators. Built with a modular component architecture so each upcoming creator utility can be plugged in seamlessly.
-
----
-
-## 🚀 Version 1 Scope
-
-This release establishes the core platform shell, visual branding, responsive layout, and navigation:
-
-* **Brand Identity**: Modern creator-centric visual direction inspired by YouTube (deep slate, obsidian black, vibrant YouTube red accents, crisp typography).
-* **Navigation Bar**: Sticky top header with brand logo, smooth navigation anchors (`Home`, `Tools`, `About`), mobile drawer menu, and quick CTA.
-* **Hero Section**:
-  * Heading: *"Free Tools for YouTube Creators"*
-  * Subheading: *"Simple, fast and free tools to help creators grow, optimize and manage their YouTube content."*
-  * Call to Action: *“Explore Tools”* with smooth scroll to the Tools section.
-  * SaaS preview shell illustrating future creator workflows.
-* **Tools Section**:
-  * Section Title: *"YouTube Free Tools"*
-  * Placeholder State: *"Powerful creator tools are coming soon."*
-  * Curated non-functional preview cards labeled **"Coming Soon"** highlighting upcoming creator utilities.
-* **About Section**:
-  * Core mission: *"YouTube Free Tools is a free creator-focused platform designed to bring useful YouTube utilities into one simple website."*
-  * Key platform values: 100% Free Forever, Fast & Browser-Native, Creator-Centric Focus, Privacy & Security.
-* **Footer & Modals**:
-  * Brand tagline *"Free tools for creators"*.
-  * Accessible interactive modals for *Privacy Policy*, *Terms of Service*, and *Contact & Inquiries*.
-  * Independent creator project legal disclaimer.
+[![React](https://img.shields.io/badge/React-19.2-blue.svg?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue.svg?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4.3-38B2AC.svg?logo=tailwind-css)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-8.3-646CFF.svg?logo=vite)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
-## 🛠️ Architecture & Project Structure
+## ✨ Features & Tools
 
-```
-├── public/
-│   └── favicon.svg           # Brand SVG icon
-├── src/
-│   ├── components/
-│   │   ├── common/
-│   │   │   └── Logo.tsx      # Reusable brand logo component
-│   │   ├── layout/
-│   │   │   ├── Header.tsx    # Sticky navigation with mobile menu
-│   │   │   └── Footer.tsx    # Semantic footer with legal links
-│   │   ├── modals/
-│   │   │   └── InfoModal.tsx # Accessible modal for Privacy, Terms & Contact
-│   │   └── sections/
-│   │       ├── HeroSection.tsx   # SaaS hero with CTA
-│   │       ├── ToolsSection.tsx  # Tools directory & Coming Soon placeholders
-│   │       └── AboutSection.tsx  # Mission statement & value pillars
-│   ├── config/
-│   │   ├── siteConfig.ts     # Centralized brand copy & nav links
-│   │   └── toolsRegistry.ts  # Registry for tools and upcoming utilities
-│   ├── types/
-│   │   └── index.ts          # Strongly typed interfaces
-│   ├── App.tsx               # Main application container
-│   ├── index.css             # Tailwind v4 styles, glassmorphism & themes
-│   └── main.tsx              # React DOM entry point
-├── package.json
-└── vite.config.ts
-```
+### 1. 🔍 YouTube Link Analyzer (`/tools/youtube-analyzer`)
+- **Metadata Inspection**: Title, author, duration, view count, and publish dates.
+- **HD Thumbnails**: One-click preview and download for MaxRes (1080p), High-Quality (HQ), and Medium (MQ) thumbnails.
+- **Custom Embed Generator**: Configure start/end times, autoplay, hide controls, looping, and privacy-enhanced `youtube-nocookie.com` mode.
+- **Direct Media Inspection**: Inspect local and remote video files directly.
 
----
+### 2. 🎥 Video Cropper (`/tools/video-cropper`)
+- **8-Handle Visual Crop**: Interactive canvas overlay with rule-of-thirds grid.
+- **Popular Presets**: 16:9 Landscape, 9:16 Shorts / Reels / TikTok, 1:1 Square, 4:5 Instagram, 4:3 Standard, and Freeform.
+- **Precision Controls**: Coordinate inputs (`x`, `y`, `width`, `height`) with live pixel snapping.
+- **Client-Side Export**: High-speed in-browser video rendering with zero data uploaded to external servers.
 
-## 🧩 Extending with Future Tools
+### 3. 🖼️ Image Cropper (`/tools/image-cropper`)
+- **Thumbnail & Avatar Presets**: 16:9 (YouTube Thumbnails), 9:16 (Stories/Shorts), 1:1 (Avatars/Logos).
+- **Transform Tools**: 90° rotation, horizontal flip, vertical flip, and zoom slider (1x - 3x).
+- **Multi-Format Export**: Save as PNG, high-efficiency WebP, or JPEG with adjustable quality compression.
 
-The codebase is built specifically for modular expansion:
+### 4. 🎵 Video to Audio Converter (`/tools/video-to-audio`)
+- **Direct Browser Extraction**: Extracts high-fidelity audio tracks locally from MP4, WebM, MOV, and MKV files.
+- **Multiple Formats**:
+  - **MP3** with configurable bitrates (128 kbps, 192 kbps, 256 kbps, 320 kbps) via LAME encoder.
+  - **WAV** Lossless 16-bit PCM audio.
+  - **M4A (AAC)** via browser WebCodecs / MediaRecorder.
 
-1. **Register the tool metadata** in `src/config/toolsRegistry.ts`.
-2. **Create your tool component** in `src/components/tools/<YourTool>.tsx`.
-3. **Change status** from `'coming_soon'` to `'active'`.
+### 5. 🔄 Local Video Converter (`/tools/video-converter`)
+- **Format Conversion**: Convert local videos between WebM and MP4 container formats.
+- **Resolution Scaling**: Downscale or maintain 1080p, 720p, or 480p targets.
+- **Audio Extraction**: Integrated WAV track ripping.
 
 ---
 
-## 💻 Development & Build Scripts
+## 🔒 Privacy & Architecture
+
+All processing is executed **100% client-side** using standard browser APIs:
+- **HTML5 Canvas & Video API**: Frame-by-frame visual transformations.
+- **Web Audio API**: Audio decoding, channel mixing, and sample processing.
+- **WebCodecs & MediaStream Recording**: Native in-memory encoding.
+- **Zero Server Latency**: Your media assets never leave your computer.
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18 or newer)
+- npm or pnpm
+
+### Installation
 
 ```bash
-# Start the local development server
-pnpm dev
+# Clone the repository
+git clone https://github.com/your-username/youtube-free-tools.git
 
-# Typecheck and build for production
-pnpm build
+# Navigate to project folder
+cd youtube-free-tools
+
+# Install dependencies
+npm install
+
+# Start local dev server
+npm run dev
+```
+
+Visit `http://localhost:5173` in your browser.
+
+### Build for Production
+
+```bash
+# Typecheck and compile production bundle
+npm run build
 
 # Preview production build locally
-pnpm preview
+npm run preview
 
-# Run the linter
-pnpm lint
+# Run linter
+npm run lint
 ```
+
+---
+
+## 📁 Project Structure
+
+```text
+src/
+├── components/
+│   ├── common/         # CropBoxOverlay, PrecisionControls, ZoomControls, Breadcrumb, Logo, ThemeToggle
+│   ├── layout/         # Header, Footer
+│   ├── modals/         # InfoModal (Privacy, Terms, Contact)
+│   ├── sections/       # HeroSection, ToolsSection, AboutSection
+│   └── tools/          # VideoCropper, ImageCropper, YouTubeLinkAnalyzer, LocalVideoConverter, VideoToAudioConverter
+├── context/            # ThemeContext (Dark / Light mode)
+├── pages/              # Tool routes & HomePage
+├── types/              # TypeScript schemas (crop, media, navigation)
+└── utils/              # AudioEncoder (MP3/WAV/M4A), Canvas utils
+```
+
+---
+
+## 📄 License & Disclaimer
+
+- **License**: MIT License. Free for creators and developers.
+- **Disclaimer**: YouTube Free Tools is an independent creator project and is not affiliated with, sponsored by, or endorsed by YouTube, Google LLC, or Alphabet Inc.
