@@ -7,6 +7,7 @@ interface ZoomControlsProps {
   onFitToScreen: () => void
   onResetZoom: () => void
   className?: string
+  disabled?: boolean
 }
 
 export const ZoomControls: React.FC<ZoomControlsProps> = ({
@@ -15,6 +16,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
   onFitToScreen,
   onResetZoom,
   className = '',
+  disabled = false,
 }) => {
   return (
     <div
@@ -28,8 +30,9 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
         <button
           type="button"
           title="Zoom Out"
+          disabled={disabled}
           onClick={() => onZoomChange(Math.max(0.5, parseFloat((zoom - 0.1).toFixed(2))))}
-          className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors"
+          className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ZoomOut className="w-4 h-4" />
         </button>
@@ -40,15 +43,17 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
           max="3.0"
           step="0.05"
           value={zoom}
+          disabled={disabled}
           onChange={(e) => onZoomChange(parseFloat(e.target.value))}
-          className="w-24 sm:w-32 accent-red-600 cursor-pointer"
+          className="w-24 sm:w-32 accent-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         />
 
         <button
           type="button"
           title="Zoom In"
+          disabled={disabled}
           onClick={() => onZoomChange(Math.min(3.0, parseFloat((zoom + 0.1).toFixed(2))))}
-          className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors"
+          className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ZoomIn className="w-4 h-4" />
         </button>
@@ -62,8 +67,9 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
       <div className="flex items-center gap-2">
         <button
           type="button"
+          disabled={disabled}
           onClick={onFitToScreen}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1] hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1] hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Maximize className="w-3.5 h-3.5" />
           <span>Fit to Screen</span>
@@ -71,8 +77,9 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
 
         <button
           type="button"
+          disabled={disabled}
           onClick={onResetZoom}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1] hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1] hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Zoom</span>

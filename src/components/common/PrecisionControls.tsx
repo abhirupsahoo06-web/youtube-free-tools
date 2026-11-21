@@ -8,6 +8,7 @@ interface PrecisionControlsProps {
   onCropChange: (newRect: CropRect) => void
   aspectRatio: AspectRatioOption
   onAspectRatioChange: (newRatio: AspectRatioOption) => void
+  disabled?: boolean
 }
 
 export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
@@ -17,6 +18,7 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
   onCropChange,
   aspectRatio,
   onAspectRatioChange,
+  disabled = false,
 }) => {
   const handleXChange = (val: number) => {
     const safeX = Math.max(0, Math.min(val, naturalWidth - cropRect.width))
@@ -91,15 +93,16 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
       {/* Aspect Ratio Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none w-full sm:w-auto">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-2 flex-shrink-0">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mr-2 flex-shrink-0">
             Aspect Ratio:
           </span>
           {aspectOptions.map(({ id, label }) => (
             <button
               key={id}
               type="button"
+              disabled={disabled}
               onClick={() => onAspectRatioChange(id)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                 aspectRatio === id
                   ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
                   : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08]'
@@ -134,7 +137,7 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Precision Coordinates & Dimensions (Pixels)
           </h4>
-          <span className="text-[11px] text-slate-400">Values update in real-time</span>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400">Values update in real-time</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -144,11 +147,12 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
             </label>
             <input
               type="number"
+              disabled={disabled}
               min={0}
               max={naturalWidth - cropRect.width}
               value={Math.round(cropRect.x)}
               onChange={(e) => handleXChange(parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -158,11 +162,12 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
             </label>
             <input
               type="number"
+              disabled={disabled}
               min={0}
               max={naturalHeight - cropRect.height}
               value={Math.round(cropRect.y)}
               onChange={(e) => handleYChange(parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -172,11 +177,12 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
             </label>
             <input
               type="number"
+              disabled={disabled}
               min={24}
               max={naturalWidth - cropRect.x}
               value={Math.round(cropRect.width)}
               onChange={(e) => handleWidthChange(parseInt(e.target.value) || 24)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -186,11 +192,12 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
             </label>
             <input
               type="number"
+              disabled={disabled}
               min={24}
               max={naturalHeight - cropRect.y}
               value={Math.round(cropRect.height)}
               onChange={(e) => handleHeightChange(parseInt(e.target.value) || 24)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         </div>

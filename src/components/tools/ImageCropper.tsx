@@ -275,16 +275,18 @@ export const ImageCropper: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               type="button"
+              disabled={isExporting}
               onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ResetIcon className="w-3.5 h-3.5" />
               <span>Reset</span>
             </button>
             <button
               type="button"
+              disabled={isExporting}
               onClick={handleClear}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 border border-rose-200 dark:border-rose-500/20 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 border border-rose-200 dark:border-rose-500/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear Image</span>
@@ -306,7 +308,7 @@ export const ImageCropper: React.FC = () => {
         <div
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-white/[0.15] bg-slate-50 dark:bg-[#12131c] hover:bg-slate-100 dark:hover:bg-[#161724] hover:border-red-500/50 transition-all p-12 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
+          className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-white/[0.15] bg-slate-50 dark:bg-[#12131c] hover:bg-slate-100 dark:hover:bg-[#161724] hover:border-red-500/50 transition-all p-8 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
           onClick={() => document.getElementById('image-upload-input')?.click()}
         >
           <input
@@ -341,17 +343,18 @@ export const ImageCropper: React.FC = () => {
                   Transforms
                 </span>
                 {fileSize && (
-                  <span className="text-xs text-slate-400 font-mono hidden sm:inline">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-mono hidden sm:inline">
                     • {fileSize}
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <button
                   type="button"
                   title="Rotate Counter-Clockwise"
+                  disabled={isExporting}
                   onClick={() => setRotation((prev) => (prev - 90 + 360) % 360)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>-90°</span>
@@ -359,8 +362,9 @@ export const ImageCropper: React.FC = () => {
                 <button
                   type="button"
                   title="Rotate Clockwise"
+                  disabled={isExporting}
                   onClick={() => setRotation((prev) => (prev + 90) % 360)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <RotateCw className="w-3.5 h-3.5" />
                   <span>+90°</span>
@@ -368,8 +372,9 @@ export const ImageCropper: React.FC = () => {
                 <button
                   type="button"
                   title="Flip Horizontal"
+                  disabled={isExporting}
                   onClick={() => setFlipH(!flipH)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                     flipH ? 'bg-red-600 text-white' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08]'
                   }`}
                 >
@@ -379,8 +384,9 @@ export const ImageCropper: React.FC = () => {
                 <button
                   type="button"
                   title="Flip Vertical"
+                  disabled={isExporting}
                   onClick={() => setFlipV(!flipV)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                     flipV ? 'bg-red-600 text-white' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08]'
                   }`}
                 >
@@ -391,7 +397,7 @@ export const ImageCropper: React.FC = () => {
             </div>
 
             {/* Dark Workspace Stage */}
-            <div className="relative w-full rounded-3xl bg-[#090a0f] border border-slate-800 flex items-center justify-center overflow-auto min-h-[440px] max-h-[640px] p-6 shadow-inner select-none">
+            <div className="relative w-full rounded-3xl bg-[#090a0f] border border-slate-800 flex items-center justify-center overflow-auto min-h-[280px] sm:min-h-[440px] max-h-[640px] p-3 sm:p-6 shadow-inner select-none">
               {/* Checkered pattern background */}
               <div
                 className="absolute inset-0 opacity-15 pointer-events-none"
@@ -416,7 +422,7 @@ export const ImageCropper: React.FC = () => {
                   ref={imageElementRef}
                   src={imageSrc}
                   alt="Media source"
-                  className="max-w-[70vw] max-h-[52vh] object-contain block pointer-events-none select-none"
+                  className="max-w-[85vw] sm:max-w-[70vw] max-h-[45vh] sm:max-h-[52vh] object-contain block pointer-events-none select-none"
                   style={{
                     transform: `rotate(${rotation}deg) scaleX(${flipH ? -1 : 1}) scaleY(${flipV ? -1 : 1})`,
                   }}
@@ -442,6 +448,7 @@ export const ImageCropper: React.FC = () => {
               onZoomChange={setZoom}
               onFitToScreen={() => setZoom(1.0)}
               onResetZoom={() => setZoom(1.0)}
+              disabled={isExporting}
             />
 
             {/* Precision Controls: Aspect Ratio + Live Dimensions + Numeric Inputs */}
@@ -452,6 +459,7 @@ export const ImageCropper: React.FC = () => {
               aspectRatio={aspectRatio}
               onCropChange={setCropRect}
               onAspectRatioChange={handleAspectRatioChange}
+              disabled={isExporting}
             />
           </div>
 
@@ -471,8 +479,9 @@ export const ImageCropper: React.FC = () => {
                     <button
                       key={fmt}
                       type="button"
+                      disabled={isExporting}
                       onClick={() => setExportFormat(fmt)}
-                      className={`py-2 px-3 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer ${
+                      className={`py-2 px-3 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                         exportFormat === fmt
                           ? 'bg-red-600 text-white shadow-sm'
                           : 'bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.08]'
@@ -489,7 +498,7 @@ export const ImageCropper: React.FC = () => {
                 <div>
                   <div className="flex justify-between text-xs font-semibold mb-2 text-slate-700 dark:text-slate-300">
                     <span>Quality</span>
-                    <span className="font-mono text-red-500 font-bold">{Math.round(quality * 100)}%</span>
+                    <span className="font-mono text-red-600 dark:text-red-400 font-bold">{Math.round(quality * 100)}%</span>
                   </div>
                   <input
                     type="range"
@@ -497,8 +506,9 @@ export const ImageCropper: React.FC = () => {
                     max="1"
                     step="0.05"
                     value={quality}
+                    disabled={isExporting}
                     onChange={(e) => setQuality(parseFloat(e.target.value))}
-                    className="w-full accent-red-600 cursor-pointer"
+                    className="w-full accent-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
               )}
@@ -511,7 +521,7 @@ export const ImageCropper: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowPreviewModal(true)}
-                      className="text-red-500 hover:underline flex items-center gap-1"
+                      className="text-red-600 dark:text-red-400 hover:underline flex items-center gap-1 cursor-pointer"
                     >
                       <Eye className="w-3.5 h-3.5" />
                       <span>Full View</span>
@@ -539,7 +549,7 @@ export const ImageCropper: React.FC = () => {
                 type="button"
                 onClick={handleDownload}
                 disabled={isExporting}
-                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl text-base font-bold text-white bg-gradient-to-r from-red-600 via-red-500 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all duration-200 shadow-lg shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl text-base font-bold text-white bg-gradient-to-r from-red-600 via-red-500 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all duration-200 shadow-lg shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isExporting ? (
                   <>
@@ -554,7 +564,7 @@ export const ImageCropper: React.FC = () => {
                 )}
               </button>
 
-              <div className="text-[11px] text-slate-500 text-center">
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 text-center">
                 Processed locally in your browser • Zero data uploaded
               </div>
             </div>
@@ -581,7 +591,7 @@ export const ImageCropper: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPreviewModal(false)}
-                className="text-slate-400 hover:text-white px-2 py-1 rounded-lg"
+                className="text-slate-300 hover:text-white px-2 py-1 rounded-lg cursor-pointer"
               >
                 ✕ Close
               </button>

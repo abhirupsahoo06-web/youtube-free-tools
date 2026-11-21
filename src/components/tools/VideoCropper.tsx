@@ -372,16 +372,18 @@ export const VideoCropper: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               type="button"
+              disabled={isProcessing}
               onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ResetIcon className="w-3.5 h-3.5" />
               <span>Reset</span>
             </button>
             <button
               type="button"
+              disabled={isProcessing}
               onClick={handleClear}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 border border-rose-200 dark:border-rose-500/20 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 border border-rose-200 dark:border-rose-500/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear Video</span>
@@ -403,7 +405,7 @@ export const VideoCropper: React.FC = () => {
         <div
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-white/[0.15] bg-slate-50 dark:bg-[#12131c] hover:bg-slate-100 dark:hover:bg-[#161724] hover:border-red-500/50 transition-all p-12 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
+          className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-white/[0.15] bg-slate-50 dark:bg-[#12131c] hover:bg-slate-100 dark:hover:bg-[#161724] hover:border-red-500/50 transition-all p-8 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
           onClick={() => document.getElementById('video-upload-input')?.click()}
         >
           <input
@@ -434,7 +436,7 @@ export const VideoCropper: React.FC = () => {
             {/* Top / Center: Video Preview in Large Dark Canvas Workspace */}
             <div
               ref={stageRef}
-              className="relative w-full rounded-3xl bg-[#090a0f] border border-slate-800 flex items-center justify-center overflow-auto min-h-[440px] max-h-[640px] p-6 shadow-inner select-none"
+              className="relative w-full rounded-3xl bg-[#090a0f] border border-slate-800 flex items-center justify-center overflow-auto min-h-[280px] sm:min-h-[440px] max-h-[640px] p-3 sm:p-6 shadow-inner select-none"
             >
               {/* Centered Media Container that scales with Zoom */}
               <div
@@ -454,7 +456,7 @@ export const VideoCropper: React.FC = () => {
                   onLoadedMetadata={handleLoadedMetadata}
                   onTimeUpdate={() => videoRef.current && setCurrentTime(videoRef.current.currentTime)}
                   onEnded={() => setIsPlaying(false)}
-                  className="max-w-[70vw] max-h-[52vh] object-contain block pointer-events-none select-none"
+                  className="max-w-[85vw] sm:max-w-[70vw] max-h-[45vh] sm:max-h-[52vh] object-contain block pointer-events-none select-none"
                 />
 
                 {/* Professional 8-Handle Crop Box Overlay with Rule-of-Thirds Grid */}
@@ -481,12 +483,13 @@ export const VideoCropper: React.FC = () => {
                   max={videoDuration || 100}
                   step="0.05"
                   value={currentTime}
+                  disabled={isProcessing}
                   onChange={(e) => {
                     const newT = parseFloat(e.target.value)
                     setCurrentTime(newT)
                     if (videoRef.current) videoRef.current.currentTime = newT
                   }}
-                  className="w-full accent-red-600 cursor-pointer"
+                  className="w-full accent-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 w-24 text-right">
                   {formatTime(currentTime)} / {formatTime(videoDuration)}
@@ -494,12 +497,13 @@ export const VideoCropper: React.FC = () => {
               </div>
 
               {/* Playback Controls Row */}
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={togglePlay}
-                    className="p-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-transform active:scale-95 shadow-md shadow-red-600/25 cursor-pointer"
+                    disabled={isProcessing}
+                    className="p-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-transform active:scale-95 shadow-md shadow-red-600/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     title={isPlaying ? 'Pause' : 'Play'}
                   >
                     {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
@@ -507,13 +511,14 @@ export const VideoCropper: React.FC = () => {
 
                   <button
                     type="button"
+                    disabled={isProcessing}
                     onClick={() => {
                       if (videoRef.current) {
                         videoRef.current.muted = !isMuted
                         setIsMuted(!isMuted)
                       }
                     }}
-                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer"
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     title={isMuted ? 'Unmute' : 'Mute'}
                   >
                     {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
@@ -529,8 +534,9 @@ export const VideoCropper: React.FC = () => {
 
                   <button
                     type="button"
+                    disabled={isProcessing}
                     onClick={toggleFullscreen}
-                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer"
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Fullscreen Preview"
                   >
                     {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
@@ -545,6 +551,7 @@ export const VideoCropper: React.FC = () => {
               onZoomChange={setZoom}
               onFitToScreen={() => setZoom(1.0)}
               onResetZoom={() => setZoom(1.0)}
+              disabled={isProcessing}
             />
 
             {/* Precision Controls: Aspect Ratio + Live Dimensions + Numeric Inputs */}
@@ -555,6 +562,7 @@ export const VideoCropper: React.FC = () => {
               aspectRatio={aspectRatio}
               onCropChange={setCropRect}
               onAspectRatioChange={handleAspectRatioChange}
+              disabled={isProcessing}
             />
           </div>
 
@@ -592,7 +600,13 @@ export const VideoCropper: React.FC = () => {
                     <span className="font-mono">{processingProgress}%</span>
                   </div>
 
-                  <div className="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                  <div
+                    className="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden"
+                    role="progressbar"
+                    aria-valuenow={processingProgress}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                  >
                     <div
                       className="bg-gradient-to-r from-red-600 to-rose-600 h-full transition-all duration-150"
                       style={{ width: `${processingProgress}%` }}
@@ -660,14 +674,14 @@ export const VideoCropper: React.FC = () => {
                       setProcessedVideoUrl(null)
                       setProcessedFileSize(null)
                     }}
-                    className="w-full text-center text-xs text-slate-500 hover:text-slate-800 dark:hover:text-white cursor-pointer"
+                    className="w-full text-center text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white cursor-pointer"
                   >
                     Crop another segment or adjustment
                   </button>
                 </div>
               )}
 
-              <div className="text-[11px] text-slate-500 text-center">
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 text-center">
                 Processed locally in your browser • Zero data uploaded
               </div>
             </div>

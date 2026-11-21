@@ -659,7 +659,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
               <button
                 type="submit"
                 disabled={isAnalyzingYt}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-md shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-md shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isAnalyzingYt ? (
                   <>
@@ -676,12 +676,12 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
             </div>
           </div>
 
-          <div className="text-xs text-slate-400 flex flex-wrap gap-2 items-center pt-1">
-            <span className="font-semibold text-slate-500">Formats:</span>
-            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04]">youtube.com/watch?v=</span>
-            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04]">youtu.be/</span>
-            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04]">youtube.com/shorts/</span>
-            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04]">youtube.com/embed/</span>
+          <div className="text-xs text-slate-500 dark:text-slate-400 flex flex-wrap gap-2 items-center pt-1">
+            <span className="font-semibold text-slate-600 dark:text-slate-300">Formats:</span>
+            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 font-medium border border-slate-200/60 dark:border-white/[0.06]">youtube.com/watch?v=</span>
+            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 font-medium border border-slate-200/60 dark:border-white/[0.06]">youtu.be/</span>
+            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 font-medium border border-slate-200/60 dark:border-white/[0.06]">youtube.com/shorts/</span>
+            <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 font-medium border border-slate-200/60 dark:border-white/[0.06]">youtube.com/embed/</span>
           </div>
         </form>
 
@@ -725,11 +725,11 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Video ID:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Video ID:</span>
                     <span className="text-slate-800 dark:text-slate-200 font-bold">{ytResult.videoId}</span>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Short Link:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Short Link:</span>
                     <span className="text-slate-800 dark:text-slate-200 truncate block">youtu.be/{ytResult.videoId}</span>
                   </div>
                 </div>
@@ -773,7 +773,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                   <Layers className="w-4 h-4 text-red-500" />
                   <span className="text-sm font-bold text-slate-900 dark:text-white">Thumbnail Tools</span>
                 </div>
-                <span className="text-xs text-slate-500">Official Image CDNs</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Official Image CDNs</span>
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-3">
@@ -792,7 +792,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                       className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                         selectedThumbRes === id
                           ? 'bg-red-600 text-white shadow-sm'
-                          : 'bg-white dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1]'
+                          : 'bg-white dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-200 dark:border-white/[0.08]'
                       }`}
                     >
                       {label}
@@ -854,7 +854,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
               {/* Start/End time inputs */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-500 block mb-1">Start Time (sec):</label>
+                  <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 block mb-1">Start Time (sec):</label>
                   <input
                     type="number"
                     min="0"
@@ -865,7 +865,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-500 block mb-1">End Time (sec):</label>
+                  <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 block mb-1">End Time (sec):</label>
                   <input
                     type="number"
                     min="0"
@@ -1015,7 +1015,8 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                   <button
                     type="button"
                     onClick={handlePasteMedia}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors cursor-pointer"
+                    disabled={isAnalyzingMedia || isDownloadingMedia}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-slate-300 dark:border-white/10 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Copy className="w-4 h-4" />
                     <span>Paste</span>
@@ -1023,8 +1024,8 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
 
                   <button
                     type="submit"
-                    disabled={isAnalyzingMedia}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-bold text-slate-800 dark:text-white bg-slate-200 dark:bg-white/[0.08] hover:bg-slate-300 dark:hover:bg-white/[0.14] border border-slate-300 dark:border-white/10 transition-all cursor-pointer disabled:opacity-50"
+                    disabled={isAnalyzingMedia || isDownloadingMedia}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-bold text-slate-800 dark:text-white bg-slate-200 dark:bg-white/[0.08] hover:bg-slate-300 dark:hover:bg-white/[0.14] border border-slate-300 dark:border-white/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isAnalyzingMedia ? (
                       <>
@@ -1042,8 +1043,8 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleDownloadDirectMedia}
-                    disabled={isDownloadingMedia}
-                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-md shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 cursor-pointer"
+                    disabled={isDownloadingMedia || isAnalyzingMedia}
+                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-md shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {isDownloadingMedia ? (
                       <>
@@ -1060,7 +1061,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
                 <span>Enter an authorized direct media URL (e.g. cloud storage or CDN MP4).</span>
                 <button
                   type="button"
@@ -1069,7 +1070,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                     setMediaUrl(sample)
                     setMediaError(null)
                   }}
-                  className="text-red-600 dark:text-red-400 hover:underline cursor-pointer"
+                  className="text-red-600 dark:text-red-400 hover:underline cursor-pointer self-start sm:self-auto"
                 >
                   Load Sample MP4
                 </button>
@@ -1094,21 +1095,21 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                 {/* The 6 Required Metadata Fields */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Filename:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Filename:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold truncate block" title={directMediaMeta.filename}>
                       {directMediaMeta.filename}
                     </span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Video Duration:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Video Duration:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold">
                       {directMediaMeta.durationFormatted || 'Available on stream'}
                     </span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Resolution:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Resolution:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold">
                       {directMediaMeta.resolution
                         ? `${directMediaMeta.resolution.width} × ${directMediaMeta.resolution.height}`
@@ -1117,21 +1118,21 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">File Format:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">File Format:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold uppercase">
                       {directMediaMeta.format}
                     </span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">File Size:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">File Size:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold">
                       {directMediaMeta.sizeFormatted}
                     </span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">MIME Type:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">MIME Type:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold">
                       {directMediaMeta.mimeType}
                     </span>
@@ -1145,7 +1146,13 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                       <span>Downloading file...</span>
                       <span>{downloadProgress}%</span>
                     </div>
-                    <div className="w-full h-2.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                    <div
+                      className="w-full h-2.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden"
+                      role="progressbar"
+                      aria-valuenow={downloadProgress}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
                       <div
                         className="h-full bg-red-600 rounded-full transition-all duration-150"
                         style={{ width: `${downloadProgress}%` }}
@@ -1160,7 +1167,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                     type="button"
                     onClick={handleDownloadDirectMedia}
                     disabled={isDownloadingMedia}
-                    className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-base font-extrabold text-white bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-xl shadow-red-600/35 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-base font-extrabold text-white bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-xl shadow-red-600/35 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Download className="w-5 h-5 stroke-[2.5]" />
                     <span>Download {directMediaMeta.format.toUpperCase()}</span>
@@ -1252,14 +1259,14 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                 {/* Metadata Readout */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Filename:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Filename:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold truncate block" title={localMeta?.filename}>
                       {localMeta?.filename}
                     </span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Resolution:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Resolution:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold">
                       {localMeta?.resolution
                         ? `${localMeta.resolution.width} × ${localMeta.resolution.height}`
@@ -1268,14 +1275,14 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">Duration:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">Duration:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold">
                       {localMeta?.duration ? formatDuration(localMeta.duration) : '00:00'}
                     </span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-                    <span className="text-slate-400 block font-sans text-[11px] mb-0.5">File Size:</span>
+                    <span className="text-slate-500 dark:text-slate-400 block font-sans text-[11px] mb-0.5">File Size:</span>
                     <span className="text-slate-900 dark:text-slate-100 font-bold">
                       {localMeta?.sizeFormatted}
                     </span>
@@ -1355,7 +1362,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowThumbModal(false)}
-                className="text-slate-400 hover:text-white px-2 py-1 rounded-lg"
+                className="text-slate-300 hover:text-white px-2 py-1 rounded-lg cursor-pointer"
               >
                 ✕ Close
               </button>

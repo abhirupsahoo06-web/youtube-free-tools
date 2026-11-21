@@ -164,7 +164,7 @@ export const VideoToAudioConverter: React.FC = () => {
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className="relative group border-2 border-dashed border-slate-300 dark:border-white/10 hover:border-red-500 dark:hover:border-red-500 rounded-3xl p-12 sm:p-16 text-center cursor-pointer transition-all bg-white dark:bg-[#14151f] shadow-sm hover:shadow-xl hover:shadow-red-500/5 flex flex-col items-center justify-center min-h-[380px]"
+          className="relative group border-2 border-dashed border-slate-300 dark:border-white/10 hover:border-red-500 dark:hover:border-red-500 rounded-3xl p-8 sm:p-16 text-center cursor-pointer transition-all bg-white dark:bg-[#14151f] shadow-sm hover:shadow-xl hover:shadow-red-500/5 flex flex-col items-center justify-center min-h-[280px] sm:min-h-[380px]"
         >
           <input
             ref={fileInputRef}
@@ -223,10 +223,11 @@ export const VideoToAudioConverter: React.FC = () => {
             </div>
 
             {/* Video File Details Bar */}
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] flex items-center justify-between shadow-sm">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
+                  disabled={isProcessing}
                   onClick={() => {
                     if (videoRef.current) {
                       if (isPlaying) videoRef.current.pause()
@@ -234,13 +235,13 @@ export const VideoToAudioConverter: React.FC = () => {
                       setIsPlaying(!isPlaying)
                     }
                   }}
-                  className="p-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-transform active:scale-95 cursor-pointer"
+                  className="p-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                 </button>
 
                 <div className="text-xs text-slate-500 dark:text-slate-400">
-                  <span className="font-semibold text-slate-900 dark:text-white truncate block max-w-xs sm:max-w-md">
+                  <span className="font-semibold text-slate-900 dark:text-white truncate block max-w-[200px] sm:max-w-md">
                     {selectedFile?.name}
                   </span>
                   <div className="flex items-center gap-2 mt-0.5">
@@ -257,8 +258,9 @@ export const VideoToAudioConverter: React.FC = () => {
 
               <button
                 type="button"
+                disabled={isProcessing}
                 onClick={handleClear}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Remove</span>
@@ -337,8 +339,9 @@ export const VideoToAudioConverter: React.FC = () => {
                     <button
                       key={id}
                       type="button"
+                      disabled={isProcessing}
                       onClick={() => setTargetFormat(id)}
-                      className={`p-3.5 rounded-2xl flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer ${
+                      className={`p-3.5 rounded-2xl flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                         targetFormat === id
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
                           : 'bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200 dark:border-white/[0.06]'
@@ -346,7 +349,7 @@ export const VideoToAudioConverter: React.FC = () => {
                     >
                       <FileAudio className="w-5 h-5 mb-0.5" />
                       <span className="text-xs font-bold">{label}</span>
-                      <span className={`text-[10px] ${targetFormat === id ? 'text-red-100' : 'text-slate-400'}`}>
+                      <span className={`text-[10px] ${targetFormat === id ? 'text-red-100' : 'text-slate-500 dark:text-slate-400'}`}>
                         {desc}
                       </span>
                     </button>
@@ -371,8 +374,9 @@ export const VideoToAudioConverter: React.FC = () => {
                       <button
                         key={rate}
                         type="button"
+                        disabled={isProcessing}
                         onClick={() => setMp3Bitrate(rate)}
-                        className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-xs font-bold transition-all cursor-pointer ${
+                        className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-xs font-bold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                           mp3Bitrate === rate
                             ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
                             : 'bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/[0.08]'
@@ -412,7 +416,13 @@ export const VideoToAudioConverter: React.FC = () => {
                     </span>
                     <span className="font-mono">{progress}%</span>
                   </div>
-                  <div className="w-full h-3 rounded-full bg-slate-100 dark:bg-white/[0.06] overflow-hidden p-0.5 border border-slate-200 dark:border-white/10">
+                  <div
+                    className="w-full h-3 rounded-full bg-slate-100 dark:bg-white/[0.06] overflow-hidden p-0.5 border border-slate-200 dark:border-white/10"
+                    role="progressbar"
+                    aria-valuenow={progress}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                  >
                     <div
                       className="h-full bg-gradient-to-r from-red-600 to-rose-500 rounded-full transition-all duration-150"
                       style={{ width: `${progress}%` }}
@@ -426,7 +436,7 @@ export const VideoToAudioConverter: React.FC = () => {
                 type="button"
                 onClick={handleConvert}
                 disabled={isProcessing}
-                className="w-full py-4 rounded-2xl text-base font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-lg shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-4 rounded-2xl text-base font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 transition-all shadow-lg shadow-red-600/30 hover:shadow-red-600/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>

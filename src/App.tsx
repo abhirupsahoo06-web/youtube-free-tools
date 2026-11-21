@@ -34,7 +34,7 @@ function AppContent() {
   const [modalType, setModalType] = useState<ModalType>(null)
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#0b0c10] text-slate-800 dark:text-slate-100 selection:bg-red-600 selection:text-white transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-[#0b0c10] text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <ScrollToTop />
 
       {/* Header */}
