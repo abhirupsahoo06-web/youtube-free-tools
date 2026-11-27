@@ -91,9 +91,9 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
   return (
     <div className="w-full space-y-4">
       {/* Aspect Ratio Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm">
+      <div className="glass-surface flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none w-full sm:w-auto">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mr-2 flex-shrink-0">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mr-2 flex-shrink-0">
             Aspect Ratio:
           </span>
           {aspectOptions.map(({ id, label }) => (
@@ -104,8 +104,8 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
               onClick={() => onAspectRatioChange(id)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                 aspectRatio === id
-                  ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08]'
+                  ? 'bg-red-600 text-white shadow-sm'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-900/[0.06] dark:hover:bg-white/[0.08]'
               }`}
             >
               {label}
@@ -114,7 +114,7 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
         </div>
 
         {/* Live Original vs Crop Dimensions Display */}
-        <div className="flex items-center gap-3 text-xs border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-white/[0.08] pt-2 sm:pt-0 sm:pl-3">
+        <div className="flex items-center gap-3 text-xs border-t sm:border-t-0 sm:border-l border-slate-200/80 dark:border-white/[0.1] pt-2 sm:pt-0 sm:pl-3">
           <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
             <span>Original:</span>
             <strong className="font-mono text-slate-800 dark:text-slate-200">
@@ -132,9 +132,9 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
       </div>
 
       {/* Numeric Precision Coordinates Controls (X, Y, Width, Height) */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm">
+      <div className="glass-surface p-4 sm:p-5 rounded-2xl">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
             Precision Coordinates & Dimensions (Pixels)
           </h4>
           <span className="text-[11px] text-slate-500 dark:text-slate-400">Values update in real-time</span>
@@ -142,7 +142,7 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">
               X (px)
             </label>
             <input
@@ -152,12 +152,12 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
               max={naturalWidth - cropRect.width}
               value={Math.round(cropRect.x)}
               onChange={(e) => handleXChange(parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="glass-inset w-full px-3 py-2 rounded-xl text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">
               Y (px)
             </label>
             <input
@@ -167,12 +167,12 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
               max={naturalHeight - cropRect.height}
               value={Math.round(cropRect.y)}
               onChange={(e) => handleYChange(parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="glass-inset w-full px-3 py-2 rounded-xl text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">
               Width (px)
             </label>
             <input
@@ -182,12 +182,12 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
               max={naturalWidth - cropRect.x}
               value={Math.round(cropRect.width)}
               onChange={(e) => handleWidthChange(parseInt(e.target.value) || 24)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="glass-inset w-full px-3 py-2 rounded-xl text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1">
               Height (px)
             </label>
             <input
@@ -197,7 +197,7 @@ export const PrecisionControls: React.FC<PrecisionControlsProps> = ({
               max={naturalHeight - cropRect.y}
               value={Math.round(cropRect.height)}
               onChange={(e) => handleHeightChange(parseInt(e.target.value) || 24)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="glass-inset w-full px-3 py-2 rounded-xl text-sm font-mono font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         </div>

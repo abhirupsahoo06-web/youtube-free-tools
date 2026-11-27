@@ -145,7 +145,7 @@ export const VideoToAudioConverter: React.FC = () => {
     <div className="w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-10">
       {/* Header */}
       <div className="pb-6 border-b border-slate-200 dark:border-white/[0.08]">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-600 dark:text-red-400 mb-2">
+        <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-red-600 dark:text-red-400 mb-2">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Local Audio Extractor</span>
         </div>
@@ -164,7 +164,7 @@ export const VideoToAudioConverter: React.FC = () => {
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className="relative group border-2 border-dashed border-slate-300 dark:border-white/10 hover:border-red-500 dark:hover:border-red-500 rounded-3xl p-8 sm:p-16 text-center cursor-pointer transition-all bg-white dark:bg-[#14151f] shadow-sm hover:shadow-xl hover:shadow-red-500/5 flex flex-col items-center justify-center min-h-[280px] sm:min-h-[380px]"
+          className="glass-surface glass-interactive relative group border-2 border-dashed border-slate-300/90 dark:border-white/15 hover:border-red-500/60 rounded-3xl p-8 sm:p-16 text-center cursor-pointer flex flex-col items-center justify-center min-h-[280px] sm:min-h-[380px]"
         >
           <input
             ref={fileInputRef}
@@ -223,7 +223,7 @@ export const VideoToAudioConverter: React.FC = () => {
             </div>
 
             {/* Video File Details Bar */}
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+            <div className="p-4 glass-surface rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -317,7 +317,7 @@ export const VideoToAudioConverter: React.FC = () => {
 
           {/* Right Column: Audio Options & Action (5 Cols) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm space-y-6">
+            <div className="p-6 sm:p-8 glass-surface rounded-3xl shadow-sm space-y-6">
               <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Music className="w-4 h-4 text-red-500" />
                 <span>Audio Extraction Settings</span>

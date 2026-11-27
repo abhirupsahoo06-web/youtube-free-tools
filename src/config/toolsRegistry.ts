@@ -7,6 +7,19 @@ import type { CreatorTool } from '../types'
  */
 export const CREATOR_TOOLS: CreatorTool[] = [
   {
+    id: 'video-enhancer',
+    title: 'Video Quality Enhancer',
+    subtitle: 'Upscale & enhance videos up to 4K UHD.',
+    description:
+      'Improve video clarity up to 4K UHD using FFmpeg Lanczos upscaling or configured Real-ESRGAN AI super-resolution while preserving aspect ratio and audio sync.',
+    route: '/tools/video-enhancer',
+    buttonText: 'Open Video Enhancer',
+    status: 'active',
+    iconName: 'Wand2',
+    badgeText: 'Up to 4K UHD',
+    aspectRatioTags: ['720p HD', '1080p FHD', '1440p QHD', '4K UHD', 'FFmpeg & AI'],
+  },
+  {
     id: 'youtube-analyzer',
     title: 'YouTube Link Analyzer',
     subtitle: 'Analyze links, inspect thumbnails & generate embeds.',

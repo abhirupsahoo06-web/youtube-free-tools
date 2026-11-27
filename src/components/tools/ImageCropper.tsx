@@ -259,7 +259,7 @@ export const ImageCropper: React.FC = () => {
       {/* Tool Header */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/[0.08]">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-600 dark:text-red-400 mb-2">
+          <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-red-600 dark:text-red-400 mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Interactive Crop Suite</span>
           </div>
@@ -308,7 +308,7 @@ export const ImageCropper: React.FC = () => {
         <div
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-white/[0.15] bg-slate-50 dark:bg-[#12131c] hover:bg-slate-100 dark:hover:bg-[#161724] hover:border-red-500/50 transition-all p-8 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
+          className="glass-surface glass-interactive rounded-3xl border-2 border-dashed border-slate-300/90 dark:border-white/[0.15] hover:border-red-500/50 p-8 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
           onClick={() => document.getElementById('image-upload-input')?.click()}
         >
           <input
@@ -337,7 +337,7 @@ export const ImageCropper: React.FC = () => {
           {/* Main Visual Editor (Col 8) */}
           <div className="lg:col-span-8 flex flex-col gap-4">
             {/* Top Transform Buttons Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3 glass-surface rounded-2xl shadow-sm">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Transforms
@@ -466,7 +466,7 @@ export const ImageCropper: React.FC = () => {
           {/* Export Sidebar (Col 4) */}
           <div className="lg:col-span-4 space-y-6">
             {/* Export Card */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm space-y-5">
+            <div className="p-6 glass-surface rounded-3xl shadow-sm space-y-5">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">Export Options</h3>
 
               {/* Format selection */}
@@ -581,17 +581,17 @@ export const ImageCropper: React.FC = () => {
           onClick={() => setShowPreviewModal(false)}
         >
           <div
-            className="relative max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-700 rounded-3xl p-6 flex flex-col items-center gap-4 overflow-hidden"
+            className="glass-surface-elevated relative max-w-4xl max-h-[90vh] rounded-3xl p-6 flex flex-col items-center gap-4 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between w-full border-b border-slate-800 pb-3">
-              <h4 className="text-base font-bold text-white">
+            <div className="flex items-center justify-between w-full border-b border-slate-200/70 dark:border-white/[0.08] pb-3">
+              <h4 className="text-base font-bold text-slate-900 dark:text-white">
                 Cropped Preview ({Math.round(cropRect.width)} × {Math.round(cropRect.height)} px)
               </h4>
               <button
                 type="button"
                 onClick={() => setShowPreviewModal(false)}
-                className="text-slate-300 hover:text-white px-2 py-1 rounded-lg cursor-pointer"
+                className="glass-pill text-slate-700 dark:text-slate-200 px-3 py-1 rounded-xl text-xs font-semibold cursor-pointer"
               >
                 ✕ Close
               </button>

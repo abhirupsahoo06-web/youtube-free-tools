@@ -581,7 +581,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
     <div className="w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-12">
       {/* Page Title */}
       <div className="pb-6 border-b border-slate-200 dark:border-white/[0.08]">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-600 dark:text-red-400 mb-2">
+        <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-red-600 dark:text-red-400 mb-2">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Creator Utility & Media Suite</span>
         </div>
@@ -596,7 +596,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
       {/* ========================================================= */}
       {/* CARD 1: YOUTUBE LINK ANALYZER */}
       {/* ========================================================= */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm space-y-6">
+      <div className="p-6 sm:p-8 glass-surface rounded-3xl shadow-sm space-y-6">
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.06] pb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center text-red-600 dark:text-red-400 shadow-inner">
@@ -633,7 +633,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                   setYtError(null)
                 }}
                 placeholder="https://www.youtube.com/watch?v=..."
-                className="w-full pl-4 pr-10 py-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all font-mono"
+                className="glass-inset w-full pl-4 pr-10 py-3.5 rounded-2xl text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all font-mono"
               />
               {ytUrl && (
                 <button
@@ -925,7 +925,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
       {/* ========================================================= */}
       {/* CARD 2: VIDEO FILE DOWNLOADER (REAL DOWNLOAD WORKFLOW) */}
       {/* ========================================================= */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14151f] border-2 border-red-500/20 dark:border-red-500/30 shadow-xl shadow-red-500/5 space-y-6">
+      <div className="glass-surface p-6 sm:p-8 rounded-3xl space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-white/[0.06] pb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-red-600 text-white flex items-center justify-center shadow-md shadow-red-600/30">
@@ -995,7 +995,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
                       setMediaError(null)
                     }}
                     placeholder="https://example.com/video.mp4"
-                    className="w-full pl-4 pr-10 py-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.1] text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all font-mono"
+                    className="glass-inset w-full pl-4 pr-10 py-3.5 rounded-2xl text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all font-mono"
                   />
                   {mediaUrl && (
                     <button
@@ -1318,7 +1318,7 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
       </div>
 
       {/* Utility Footer Card: Convert My Video to Audio */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm space-y-4">
+      <div className="p-6 sm:p-8 glass-surface rounded-3xl shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-600 dark:text-red-400">
@@ -1352,17 +1352,17 @@ export const YouTubeLinkAnalyzer: React.FC = () => {
           onClick={() => setShowThumbModal(false)}
         >
           <div
-            className="relative max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-700 rounded-3xl p-6 flex flex-col items-center gap-4 overflow-hidden"
+            className="glass-surface-elevated relative max-w-4xl max-h-[90vh] rounded-3xl p-6 flex flex-col items-center gap-4 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between w-full border-b border-slate-800 pb-3">
-              <h4 className="text-base font-bold text-white">
+            <div className="flex items-center justify-between w-full border-b border-slate-200/70 dark:border-white/[0.08] pb-3">
+              <h4 className="text-base font-bold text-slate-900 dark:text-white">
                 Thumbnail Preview ({selectedThumbRes.toUpperCase()})
               </h4>
               <button
                 type="button"
                 onClick={() => setShowThumbModal(false)}
-                className="text-slate-300 hover:text-white px-2 py-1 rounded-lg cursor-pointer"
+                className="glass-pill text-slate-700 dark:text-slate-200 px-3 py-1 rounded-xl text-xs font-semibold cursor-pointer"
               >
                 ✕ Close
               </button>

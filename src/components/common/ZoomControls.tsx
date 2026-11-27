@@ -20,11 +20,11 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] text-xs shadow-sm ${className}`}
+      className={`glass-surface flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl text-xs ${className}`}
     >
       {/* Zoom Slider & Increments */}
       <div className="flex items-center gap-2.5">
-        <span className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+        <span className="font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
           Zoom:
         </span>
         <button
@@ -32,7 +32,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
           title="Zoom Out"
           disabled={disabled}
           onClick={() => onZoomChange(Math.max(0.5, parseFloat((zoom - 0.1).toFixed(2))))}
-          className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="glass-inset p-1.5 rounded-lg text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ZoomOut className="w-4 h-4" />
         </button>
@@ -53,7 +53,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
           title="Zoom In"
           disabled={disabled}
           onClick={() => onZoomChange(Math.min(3.0, parseFloat((zoom + 0.1).toFixed(2))))}
-          className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="glass-inset p-1.5 rounded-lg text-slate-700 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ZoomIn className="w-4 h-4" />
         </button>
@@ -69,7 +69,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
           type="button"
           disabled={disabled}
           onClick={onFitToScreen}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1] hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          className="glass-inset inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Maximize className="w-3.5 h-3.5" />
           <span>Fit to Screen</span>
@@ -79,7 +79,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
           type="button"
           disabled={disabled}
           onClick={onResetZoom}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1] hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          className="glass-inset inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Zoom</span>

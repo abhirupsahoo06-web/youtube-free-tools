@@ -356,7 +356,7 @@ export const VideoCropper: React.FC = () => {
       {/* Header */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/[0.08]">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-600 dark:text-red-400 mb-2">
+          <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-red-600 dark:text-red-400 mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Interactive Crop Suite</span>
           </div>
@@ -405,7 +405,7 @@ export const VideoCropper: React.FC = () => {
         <div
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-white/[0.15] bg-slate-50 dark:bg-[#12131c] hover:bg-slate-100 dark:hover:bg-[#161724] hover:border-red-500/50 transition-all p-8 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
+          className="glass-surface glass-interactive rounded-3xl border-2 border-dashed border-slate-300/90 dark:border-white/[0.15] hover:border-red-500/50 p-8 sm:p-20 text-center flex flex-col items-center justify-center cursor-pointer group"
           onClick={() => document.getElementById('video-upload-input')?.click()}
         >
           <input
@@ -474,7 +474,7 @@ export const VideoCropper: React.FC = () => {
             </div>
 
             {/* Bottom: Video Timeline & Playback Bar */}
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] flex flex-col gap-3 shadow-sm">
+            <div className="p-4 glass-surface rounded-2xl flex flex-col gap-3 shadow-sm">
               {/* Timeline Seek Bar */}
               <div className="flex items-center gap-3">
                 <input
@@ -568,7 +568,7 @@ export const VideoCropper: React.FC = () => {
 
           {/* Export Sidebar (Col 4) */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="p-6 rounded-3xl bg-white dark:bg-[#14151f] border border-slate-200 dark:border-white/[0.08] shadow-sm space-y-5">
+            <div className="p-6 glass-surface rounded-3xl shadow-sm space-y-5">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">Export Cropped Video</h3>
 
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.06] text-xs space-y-2 text-slate-600 dark:text-slate-400">
