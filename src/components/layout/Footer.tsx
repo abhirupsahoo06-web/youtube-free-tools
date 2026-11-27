@@ -9,6 +9,8 @@ interface FooterProps {
   onOpenModal: (type: ModalType) => void
 }
 
+const CURRENT_YEAR = new Date().getFullYear()
+
 const toolLinks = [
   { label: 'YouTube Link Analyzer', route: '/tools/youtube-analyzer', icon: Search },
   { label: 'Video Cropper', route: '/tools/video-cropper', icon: Video },
@@ -116,7 +118,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
           <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 flex-shrink-0 whitespace-nowrap">
             <span>Built with</span>
             <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-            <span>• © {new Date().getFullYear()} YouTube Free Tools</span>
+            <span>• © {CURRENT_YEAR} YouTube Free Tools</span>
           </div>
         </div>
       </div>

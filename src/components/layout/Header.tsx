@@ -54,6 +54,13 @@ export const Header: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
   const navigate = useNavigate()
+  const [prevPathname, setPrevPathname] = useState(location.pathname)
+
+  if (location.pathname !== prevPathname) {
+    setPrevPathname(location.pathname)
+    setMobileMenuOpen(false)
+    setToolsDropdownOpen(false)
+  }
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -71,12 +78,6 @@ export const Header: React.FC = () => {
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [])
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false)
-    setToolsDropdownOpen(false)
-  }, [location.pathname])
 
   const handleNavClick = (hash: string) => {
     setMobileMenuOpen(false)
